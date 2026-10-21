@@ -12,7 +12,7 @@ def load(archive, path):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--mod', type=Path, default=Path('build/libs/enchantingoverhaul-0.3.1.jar'))
+    parser.add_argument('--mod', type=Path, default=Path('build/libs/enchantingoverhaul-0.3.2.jar'))
     parser.add_argument('--minecraft-common', type=Path, required=True)
     parser.add_argument('--minecraft-client', type=Path, required=True)
     args = parser.parse_args()
@@ -26,7 +26,7 @@ def main():
                 load(mod, path)
                 json_count += 1
         metadata = load(mod, 'fabric.mod.json')
-        assert metadata['version'] == '0.3.1'
+        assert metadata['version'] == '0.3.2'
         assert metadata['depends']['minecraft'] == '26.3'
         assert metadata['mixins'] == ['enchantingoverhaul.mixins.json']
         mixin_config = load(mod, metadata['mixins'][0])
@@ -114,6 +114,13 @@ def main():
             assert b'WorkstationTooltip' in bytecode
             assert b'net/minecraft/client/gui/components/Tooltip' not in bytecode, 'Long previews must not use above-widget positioning'
         assert 'dev/enchantingoverhaul/core/TooltipBounds.class' in mod_names
+        replica_screen = mod.read('dev/enchantingoverhaul/client/ReplicatorScreen.class')
+        replica_button = mod.read('dev/enchantingoverhaul/client/ReplicatorScreen$ReplicaButton.class')
+        assert b'WorkstationTooltip' in replica_screen and b'openSearch' in replica_screen
+        assert b'hasControlDownWithQuirk' in replica_screen and b'isHoveredOrFocused' not in replica_screen
+        assert b'WidgetPreviewPolicy' in replica_button and b'isKeyboard' in replica_button
+        assert b'fillGradient' in replica_screen and b'fillGradient' in replica_button
+        assert 'dev/enchantingoverhaul/core/ReplicatorLayout.class' in mod_names
         for screen in ('ReferenceWorkstationScreen', 'ReferenceButton', 'CombinerScreen'):
             bytecode = mod.read(f'dev/enchantingoverhaul/client/{screen}.class')
             assert b'isHoveredOrFocused' not in bytecode, 'Mouse focus must not pin previews'

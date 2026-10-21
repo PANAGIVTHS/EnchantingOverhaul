@@ -6,6 +6,7 @@ import dev.enchantingoverhaul.block.WorkstationBlockEntity;
 import dev.enchantingoverhaul.core.LibraryKnowledge;
 import dev.enchantingoverhaul.core.ReplicationDefinition;
 import dev.enchantingoverhaul.core.ReplicationRules;
+import dev.enchantingoverhaul.core.ReplicatorLayout;
 import dev.enchantingoverhaul.game.Enchantments;
 import dev.enchantingoverhaul.game.PlayerExperience;
 import dev.enchantingoverhaul.game.ReplicationService;
@@ -22,7 +23,7 @@ import net.minecraft.world.item.Items;
 /** Vanilla menu slots/data are the entire protocol. No client-supplied cost, item or XP payload exists. */
 public final class ReplicatorMenu extends AbstractContainerMenu {
     public static final List<ReplicationDefinition> DEFINITIONS = EnchantingOverhaul.DEFINITIONS;
-    public static final int WIDTH = 320, HEIGHT = 232;
+    public static final int WIDTH = ReplicatorLayout.WIDTH, HEIGHT = ReplicatorLayout.HEIGHT;
     private static final int BASE = DEFINITIONS.size();
     private static final int SELECTED = BASE, LEVEL = BASE + 1, XP = BASE + 2, LAPIS = BASE + 3,
             CATALYST = BASE + 4, STATUS = BASE + 5, PLAYER_XP = BASE + 6;
@@ -39,18 +40,25 @@ public final class ReplicatorMenu extends AbstractContainerMenu {
         data.set(SELECTED, -1);
         data.set(LEVEL, 1);
         data.set(STATUS, ReplicationRules.FailureReason.INVALID_REQUEST.ordinal());
-        addSlot(new Slot(inventory, 0, 20, 40) {
+        addSlot(new Slot(inventory, 0, ReplicatorLayout.INPUT_X, ReplicatorLayout.INPUT_Y) {
             @Override public int getMaxStackSize() { return 1; }
             @Override public boolean mayPlace(ItemStack stack) {
                 return Enchantments.isBook(stack) || DEFINITIONS.stream().anyMatch(d ->
                         Enchantments.find(owner.level(), d.enchantmentId()).map(e -> e.value().isSupportedItem(stack)).orElse(false));
             }
         });
-        addSlot(new Slot(inventory, 1, 60, 40) {
+        addSlot(new Slot(inventory, 1, ReplicatorLayout.INPUT_X + ReplicatorLayout.INPUT_PITCH, ReplicatorLayout.INPUT_Y) {
             @Override public boolean mayPlace(ItemStack stack) { return stack.is(Items.LAPIS_LAZULI); }
         });
-        addSlot(new Slot(inventory, 2, 100, 40));
-        addStandardInventorySlots(playerInventory, 8, 150);
+        addSlot(new Slot(inventory, 2, ReplicatorLayout.INPUT_X + 2 * ReplicatorLayout.INPUT_PITCH, ReplicatorLayout.INPUT_Y));
+        // Preserve vanilla inventory indexing/shift-click ranges while matching the reference grid.
+        for (int row = 0; row < 3; row++) for (int col = 0; col < 9; col++)
+            addSlot(new Slot(playerInventory, col + row * 9 + 9,
+                    ReplicatorLayout.INVENTORY_X + col * ReplicatorLayout.SLOT_PITCH,
+                    ReplicatorLayout.INVENTORY_Y + row * ReplicatorLayout.SLOT_PITCH));
+        for (int col = 0; col < 9; col++)
+            addSlot(new Slot(playerInventory, col, ReplicatorLayout.INVENTORY_X + col * ReplicatorLayout.SLOT_PITCH,
+                    ReplicatorLayout.HOTBAR_Y));
         addDataSlots(data);
     }
     public int availableMax(int index) { return data.get(index); }
