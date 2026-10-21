@@ -10,7 +10,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
 import org.joml.Vector2i;
 
-/** Full requirement previews use screen bounds, not vanilla's above-widget menu positioning. */
+/** Compact requirements use the vanilla tooltip background, clamped to the screen. */
 final class WorkstationTooltip {
     private WorkstationTooltip() {}
     private static final ClientTooltipPositioner POSITIONER = (width, height, x, y, w, h) -> {
@@ -18,7 +18,7 @@ final class WorkstationTooltip {
         return new Vector2i(p.x(), p.y());
     };
     static void show(GuiGraphicsExtractor graphics, Font font, String text, int x, int y) {
-        show(graphics, font, List.of(Component.literal(text)), x, y);
+        if (!text.isBlank()) show(graphics, font, List.of(Component.literal(text)), x, y);
     }
     static void show(GuiGraphicsExtractor graphics, Font font, List<Component> text, int x, int y) {
         int maximumWidth = Math.max(1, graphics.guiWidth() - 16);

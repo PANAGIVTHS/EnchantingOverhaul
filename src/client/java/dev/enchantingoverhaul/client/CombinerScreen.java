@@ -44,11 +44,9 @@ public final class CombinerScreen extends AbstractContainerScreen<CombinerMenu> 
         super.extractLabels(graphics,mouseX,mouseY);
         text(graphics,"Book A",8,16); text(graphics,"Book B",52,16); text(graphics,"Result",114,16);
         text(graphics,"Ingredients (20 slots)",8,52);
-        text(graphics,"Hover button: full recipe",168,206);
-        text(graphics,"No extra XP or lapis fee",168,218);
         var recipe=menu.recipe();
         if(recipe==null) {
-            wrapped(graphics,"Insert two clean books with one identical enchantment and level.",168,22,144,0xff303030);
+            wrapped(graphics,"Matching books",168,22,144,0xff303030);
         } else {
             String name=Enchantments.find(minecraft.level,recipe.enchantmentId()).map(e->e.value().description().getString()).orElse(recipe.enchantmentId());
             wrapped(graphics,name+" "+recipe.inputLevel()+" -> "+recipe.resultLevel(),168,22,144,0xff303030);
@@ -84,19 +82,20 @@ public final class CombinerScreen extends AbstractContainerScreen<CombinerMenu> 
         StringBuilder details=new StringBuilder(name+" "+recipe.inputLevel()+" -> "+recipe.resultLevel());
         for(var ingredient:recipe.ingredients())
             details.append("\n").append(ingredient.count()).append(" x ").append(ingredientName(ingredient));
-        return details.append("\n").append(statusText()).toString();
+        if (menu.status() != SynthesisService.Status.READY) details.append("\n").append(statusText());
+        return details.toString();
     }
     private String statusText() {
         return switch(menu.status()) {
-            case READY -> "Ready. Consumes both books and listed ingredients. Bottles returned to storage.";
-            case CURSED_BOOKS -> "Purify cursed books in the Extractor first.";
-            case MISMATCHED_BOOKS -> "Books must have the same single enchantment and level.";
-            case MAXIMUM_LEVEL -> "No upgrade above the vanilla maximum.";
-            case NO_RECIPE -> "No synthesis upgrade for these books.";
-            case MISSING_INGREDIENTS -> "Deposit all required ingredients in this workstation's storage.";
-            case OUTPUT_BLOCKED -> "Take the previous result before synthesizing.";
-            case NO_BOTTLE_SPACE -> "Make storage space for returned empty bottles.";
-            case INVALID_BOOKS -> "Insert two clean single-enchantment books.";
+            case READY -> "Ready";
+            case CURSED_BOOKS -> "Cursed book";
+            case MISMATCHED_BOOKS -> "Books do not match";
+            case MAXIMUM_LEVEL -> "Maximum level";
+            case NO_RECIPE -> "No recipe";
+            case MISSING_INGREDIENTS -> "Missing ingredients";
+            case OUTPUT_BLOCKED -> "Result slot occupied";
+            case NO_BOTTLE_SPACE -> "No room for bottles";
+            case INVALID_BOOKS -> "Requires two matching books";
         };
     }
 }

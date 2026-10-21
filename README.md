@@ -76,7 +76,7 @@ Mending is the most expensive extraction. Every beneficial operation also requir
 
 ## Controls and shared workstations
 
-The Replicator follows the compact screenshot layout: click its title or press **Ctrl+F** to reveal search. Clear the query and click outside to restore the title. Extractor search is unchanged. Search supports ordinary typing, including E, while focused; Escape closes the screen. Click outside search to restore container shortcuts. Scroll enchantment rows with the wheel or drag the vertical thumb. Hover Cost or a button for full payment/material information, including unavailable actions.
+The Replicator and Extractor follow their compact screenshot layouts: click the title or press **Ctrl+F** to reveal search. Clear the query and click outside to restore the title. Search supports ordinary typing, including E, while focused; Escape closes the screen. Click outside search to restore container shortcuts. Scroll enchantment rows with the wheel or drag the vertical thumb. Item slots use normal Minecraft tooltips; empty slots, titles and level buttons show no instructional popups. Enchantment rows show only the full name. Hover Cost or the action button for a short XP/material summary and, when blocked, a brief reason. Combiner recipe hovers retain exact ingredient quantities and potion variants.
 
 Mouse-click focus no longer pins requirement popups or hover highlights after the pointer leaves. Tab/arrow keyboard focus still supports previews. A selected enchantment's pink border is intentional selection, not a held-down mouse button. Changing the Replicator target clears its old selection to avoid applying a previously previewed operation to a different item; the target itself remains inserted after a successful operation.
 
@@ -95,6 +95,6 @@ python scripts/verify_artifact.py \
   --minecraft-client /opt/hermes-tools/caches/gradle/caches/fabric-loom/26.3/minecraft-client.jar
 ```
 
-Main artifact: `build/libs/enchantingoverhaul-0.3.2.jar` (not the `-sources.jar`). Reports: `build/reports/tests/test/index.html`.
+Main artifact: `build/libs/enchantingoverhaul-0.3.4.jar` (not the `-sources.jar`). Reports: `build/reports/tests/test/index.html`.
 
 Automated work uses ordinary non-game JUnit and resource/bytecode/source audits. Minecraft, dedicated servers, GameTests and graphical gameplay testing are **not** launched by the assistant. Builds and static audits do not establish runtime mixin application, networking, rendering, persistence or multiplayer correctness; the player owns those checks. No commits or synchronization are performed without permission.

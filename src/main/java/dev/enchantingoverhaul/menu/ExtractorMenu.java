@@ -2,6 +2,7 @@ package dev.enchantingoverhaul.menu;
 
 import dev.enchantingoverhaul.ModContent;
 import dev.enchantingoverhaul.core.ExtractionRules;
+import dev.enchantingoverhaul.core.ExtractorLayout;
 import dev.enchantingoverhaul.game.Enchantments;
 import dev.enchantingoverhaul.game.ExtractionService;
 import dev.enchantingoverhaul.game.PlayerExperience;
@@ -20,7 +21,7 @@ import net.minecraft.world.item.ItemStack;
 
 /** Two visible workstation slots; one server-authoritative action removes the selected entry. */
 public final class ExtractorMenu extends AbstractContainerMenu {
-    public static final int WIDTH = 320, HEIGHT = 232;
+    public static final int WIDTH = ExtractorLayout.WIDTH, HEIGHT = ExtractorLayout.HEIGHT;
     public static final int EXTRACT_BUTTON = 0;
     private static final int VISIBLE_SLOTS = 2;
     // Preserve the established selection-button IDs; the former Purify button (1) is rejected.
@@ -53,15 +54,22 @@ public final class ExtractorMenu extends AbstractContainerMenu {
         data = new SimpleContainerData(selected + 5);
         data.set(selected, -1);
         data.set(extractionStatus, ExtractionRules.Failure.SELECT_ENCHANTMENT.ordinal());
-        addSlot(new Slot(inventory, 0, 20, 40) {
+        addSlot(new Slot(inventory, 0, ExtractorLayout.INPUT_X, ExtractorLayout.INPUT_Y) {
             @Override public int getMaxStackSize() { return 1; }
             @Override public boolean mayPlace(ItemStack stack) { return ExtractionService.acceptsTarget(stack); }
         });
-        addSlot(new Slot(inventory, 1, 60, 40) {
+        addSlot(new Slot(inventory, 1, ExtractorLayout.INPUT_X + ExtractorLayout.INPUT_PITCH, ExtractorLayout.INPUT_Y) {
             @Override public int getMaxStackSize() { return 1; }
             @Override public boolean mayPlace(ItemStack stack) { return ExtractionService.acceptsReagent(stack); }
         });
-        addStandardInventorySlots(playerInventory, 8, 150);
+        // Preserve slot ordering and shift-click ranges; only reference-aligned coordinates change.
+        for (int row = 0; row < 3; row++) for (int col = 0; col < 9; col++)
+            addSlot(new Slot(playerInventory, col + row * 9 + 9,
+                    ExtractorLayout.INVENTORY_X + col * ExtractorLayout.SLOT_PITCH,
+                    ExtractorLayout.INVENTORY_Y + row * ExtractorLayout.SLOT_PITCH));
+        for (int col = 0; col < 9; col++)
+            addSlot(new Slot(playerInventory, col, ExtractorLayout.INVENTORY_X + col * ExtractorLayout.SLOT_PITCH,
+                    ExtractorLayout.HOTBAR_Y));
         addDataSlots(data);
     }
     public List<ExtractionRules.Key> choices() { return choices; }

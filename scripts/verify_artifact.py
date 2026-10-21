@@ -12,7 +12,7 @@ def load(archive, path):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--mod', type=Path, default=Path('build/libs/enchantingoverhaul-0.3.2.jar'))
+    parser.add_argument('--mod', type=Path, default=Path('build/libs/enchantingoverhaul-0.3.4.jar'))
     parser.add_argument('--minecraft-common', type=Path, required=True)
     parser.add_argument('--minecraft-client', type=Path, required=True)
     args = parser.parse_args()
@@ -26,7 +26,7 @@ def main():
                 load(mod, path)
                 json_count += 1
         metadata = load(mod, 'fabric.mod.json')
-        assert metadata['version'] == '0.3.2'
+        assert metadata['version'] == '0.3.4'
         assert metadata['depends']['minecraft'] == '26.3'
         assert metadata['mixins'] == ['enchantingoverhaul.mixins.json']
         mixin_config = load(mod, metadata['mixins'][0])
@@ -121,6 +121,20 @@ def main():
         assert b'WidgetPreviewPolicy' in replica_button and b'isKeyboard' in replica_button
         assert b'fillGradient' in replica_screen and b'fillGradient' in replica_button
         assert 'dev/enchantingoverhaul/core/ReplicatorLayout.class' in mod_names
+        extraction_screen = mod.read('dev/enchantingoverhaul/client/ExtractorScreen.class')
+        extraction_button = mod.read('dev/enchantingoverhaul/client/ExtractorScreen$ExtractionButton.class')
+        assert b'WorkstationTooltip' in extraction_screen and b'openSearch' in extraction_screen
+        assert b'hasControlDownWithQuirk' in extraction_screen and b'isHoveredOrFocused' not in extraction_screen
+        assert b'WidgetPreviewPolicy' in extraction_button and b'isKeyboard' in extraction_button
+        assert b'fillGradient' in extraction_screen and b'fillGradient' in extraction_button
+        assert 'dev/enchantingoverhaul/core/ExtractorLayout.class' in mod_names
+        for screen in ('ReplicatorScreen', 'ExtractorScreen', 'CombinerScreen'):
+            bytecode = mod.read(f'dev/enchantingoverhaul/client/{screen}.class')
+            assert b'extractTooltip' not in bytecode and b'slotHint' not in bytecode, 'Keep vanilla item hovers'
+            for tutorial in (b'Hover Cost', b'Click the title', b'Select to preview', b'Your XP:',
+                             b'One enchantment per operation', b'Hover button:', b'materials still required'):
+                assert tutorial not in bytecode, (screen, tutorial)
+        assert b'isBlank' in mod.read('dev/enchantingoverhaul/client/WorkstationTooltip.class')
         for screen in ('ReferenceWorkstationScreen', 'ReferenceButton', 'CombinerScreen'):
             bytecode = mod.read(f'dev/enchantingoverhaul/client/{screen}.class')
             assert b'isHoveredOrFocused' not in bytecode, 'Mouse focus must not pin previews'
@@ -196,7 +210,7 @@ def main():
         print('PASS: exact 41 non-curse catalysts/maxima cover the actual 43-enchantment Minecraft 26.3 data set.')
         print('PASS: all catalyst assets/potion identities exist; both previews link variant-aware potency labels with vanilla II translation.')
         print('PASS: all 85 synthesis upgrades cover exactly the vanilla maxima, with real vanilla ingredients/potion variants; extraction/purification fees match.')
-        print('PASS: recovery retains overflow; long previews bounded; mouse focus cannot pin popups; shared previews retain fresh action scans.')
+        print('PASS: vanilla item hovers and concise requirements; no tutorial popups in active screens; previews bounded and non-sticky; recovery retains overflow and action scans stay fresh.')
         print('PASS: all 3 workstation blockstates, model/texture references, item definitions, translations and self-drop loot tables checked.')
         print(f'PASS: {main_classes} common mod classes have no direct client-class linkage; no test classes packaged.')
         print('NOT TESTED: game bootstrap, runtime registries/rendering, inventory persistence, interaction, networking or multiplayer.')

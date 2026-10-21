@@ -117,10 +117,7 @@ public final class ReplicatorScreen extends AbstractContainerScreen<ReplicatorMe
         return ReplicatorMenu.DEFINITIONS.get(index).maxLevel() == 1 ? "" : " " + numeral(level);
     }
     private String entryTooltip(int index) {
-        return entryName(index) + entrySuffix(index) + "\nLibrary: levels I–" + numeral(menu.availableMax(index))
-                + ". Select one enchantment, then choose its level below.\n"
-                + (index == menu.selectedIndex() ? previewTooltip() : "Catalyst for a new application: 1 "
-                + Enchantments.catalystName(ReplicatorMenu.DEFINITIONS.get(index).catalyst()).getString() + ".");
+        return entryName(index) + entrySuffix(index);
     }
     private void selectEntry(int index) {
         int preferred = Math.min(menu.availableMax(index), currentLevel(ReplicatorMenu.DEFINITIONS.get(index)) + 1);
@@ -132,7 +129,6 @@ public final class ReplicatorScreen extends AbstractContainerScreen<ReplicatorMe
     private void send(int id) {
         if (minecraft.gameMode != null) minecraft.gameMode.handleInventoryButtonClick(menu.containerId, id);
     }
-    private static String playerXpLabel(int xp) { return xp == 32767 ? "32767+" : Integer.toString(xp); }
 
     @Override public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float delta) {
         super.extractBackground(g, mouseX, mouseY, delta);
@@ -178,7 +174,8 @@ public final class ReplicatorScreen extends AbstractContainerScreen<ReplicatorMe
     @Override public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float delta) {
         refreshWidgets();
         super.extractRenderState(g, mouseX, mouseY, delta);
-        if (action.previewRequested() || inside(mouseX, mouseY, ACTION_X, COST_Y - 1, ACTION_WIDTH, 9)) {
+        if (menu.selected() != null && (action.previewRequested()
+                || inside(mouseX, mouseY, ACTION_X, COST_Y - 1, ACTION_WIDTH, 9))) {
             WorkstationTooltip.show(g, font, previewTooltip(), mouseX, mouseY);
         } else {
             for (int r = 0; r < ROWS; r++) {
@@ -188,25 +185,7 @@ public final class ReplicatorScreen extends AbstractContainerScreen<ReplicatorMe
                     return;
                 }
             }
-            for (int i = 0; i < levels.length; i++) if (levels[i].previewRequested()) {
-                int level = i + 1;
-                boolean unlocked = menu.selected() != null && level <= menu.availableMax(menu.selectedIndex());
-                WorkstationTooltip.show(g, font, "Level " + numeral(level) + ": "
-                        + (!unlocked ? "not unlocked in the library." : level <= currentLevel(menu.selected())
-                        ? "already present; choose a higher level." : "select this level; hover Cost for exact payment."), mouseX, mouseY);
-                return;
-            }
-            if (!search.visible && inside(mouseX, mouseY, 5, 3, WIDTH - 10, 12))
-                WorkstationTooltip.show(g, font, "Click the title or press Ctrl+F to search enchantments.", mouseX, mouseY);
         }
-    }
-    @Override protected void extractTooltip(GuiGraphicsExtractor g, int mouseX, int mouseY) {
-        if (hoveredSlot != null && hoveredSlot.index < 3 && menu.getCarried().isEmpty()) {
-            var lines = new ArrayList<Component>();
-            if (hoveredSlot.hasItem()) lines.addAll(getTooltipFromContainerItem(hoveredSlot.getItem()));
-            lines.add(Component.literal(slotHint(hoveredSlot.index)));
-            WorkstationTooltip.show(g, font, lines, mouseX, mouseY);
-        } else super.extractTooltip(g, mouseX, mouseY);
     }
 
     private void openSearch() {
@@ -333,40 +312,28 @@ public final class ReplicatorScreen extends AbstractContainerScreen<ReplicatorMe
                 .map(e -> Enchantments.on(menu.slots.get(0).getItem()).getLevel(e)).orElse(0);
     }
     private boolean actionReady() { return menu.status() == ReplicationRules.FailureReason.NONE; }
-    private String catalystPreview() {
-        var selected = menu.selected();
-        if (selected == null) return "Choose an enchantment and level to preview its catalyst.";
-        if (currentLevel(selected) > 0) return "Upgrade: no catalyst required.";
-        return "New enchantment: 1 " + Enchantments.catalystName(selected.catalyst()).getString() + ".";
-    }
     private String previewTooltip() {
-        String selection = menu.selected() == null ? "Select an enchantment and level." : entryName(menu.selectedIndex()) + entrySuffix(menu.selectedIndex()) + ".";
-        return selection + "\nCost: " + menu.xpCost() + " raw XP points + " + menu.lapisCost() + " lapis lazuli.\n"
-                + catalystPreview() + "\nYour XP: " + playerXpLabel(menu.playerXp()) + "."
-                + (minecraft.player != null && minecraft.player.hasInfiniteMaterials() ? " Creative: XP waived; materials still required." : "")
-                + "\n" + statusText() + "\nOne enchantment per operation; target stays in its slot. Bottled catalysts return 1 glass bottle in the catalyst slot.";
-    }
-    private String slotHint(int index) {
-        return switch (index) {
-            case 0 -> "Target: one eligible item or book. It remains here after replication. Hover Cost or Replicate for the full preview.";
-            case 1 -> "Lapis slot: deposit " + menu.lapisCost() + " lapis lazuli for the selected operation. No materials are taken from your inventory.";
-            default -> "Catalyst slot. " + catalystPreview() + " Bottled catalysts return 1 glass bottle here.";
-        };
+        if (menu.selected() == null) return "";
+        String requirements = menu.xpCost() + " XP\n" + menu.lapisCost() + " × Lapis Lazuli";
+        if (currentLevel(menu.selected()) == 0)
+            requirements += "\n1 × " + Enchantments.catalystName(menu.selected().catalyst()).getString();
+        String failure = statusText();
+        return requirements + (failure.isEmpty() ? "" : "\n" + failure);
     }
     private String statusText() {
-        if (menu.selected() == null) return "Insert one target and choose an enchantment.";
+        if (menu.selected() == null) return "";
         return switch (menu.status()) {
-            case NONE -> "Ready to replicate.";
-            case INVALID_TARGET_COUNT -> "Insert exactly one target item or book.";
-            case LEVEL_NOT_INCREASED -> "Choose a higher level; no downgrades.";
-            case LEVEL_NOT_UNLOCKED -> "Blueprint removed or level not unlocked.";
-            case NOT_APPLICABLE -> "Not applicable, or book requires curse removal.";
-            case INCOMPATIBLE -> "Conflicts with an enchantment on this item.";
-            case INSUFFICIENT_LAPIS, WRONG_LAPIS -> "Deposit the required lapis in its slot.";
-            case INSUFFICIENT_CATALYST, WRONG_CATALYST -> "Deposit the exact catalyst in its slot.";
-            case INSUFFICIENT_XP -> "Not enough raw XP points.";
-            case NO_BOTTLE_SPACE -> "Make room for the empty bottle in the catalyst slot.";
-            default -> "Invalid selection or item data.";
+            case NONE -> "";
+            case INVALID_TARGET_COUNT -> "Requires one item";
+            case LEVEL_NOT_INCREASED -> "Level already applied";
+            case LEVEL_NOT_UNLOCKED -> "Level unavailable";
+            case NOT_APPLICABLE -> "Incompatible item";
+            case INCOMPATIBLE -> "Conflicting enchantment";
+            case INSUFFICIENT_LAPIS, WRONG_LAPIS -> "Missing lapis lazuli";
+            case INSUFFICIENT_CATALYST, WRONG_CATALYST -> "Missing catalyst";
+            case INSUFFICIENT_XP -> "Not enough experience";
+            case NO_BOTTLE_SPACE -> "No room for bottle";
+            default -> "Unavailable";
         };
     }
 }

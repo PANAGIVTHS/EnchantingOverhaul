@@ -63,7 +63,7 @@ class ReplicatorLayoutTest {
     @Test void standaloneScreenRetainsInputSafetyScrollingAndLiveProtocol() throws Exception {
         var node = bytes("client/ReplicatorScreen");
         assertEquals("net/minecraft/client/gui/screens/inventory/AbstractContainerScreen", node.superName);
-        for (String required : List.of("mouseScrolled", "mouseDragged", "mouseReleased", "keyPressed", "extractTooltip"))
+        for (String required : List.of("mouseScrolled", "mouseDragged", "mouseReleased", "keyPressed"))
             assertTrue(node.methods.stream().anyMatch(m -> m.name.equals(required)), required);
         var keys = node.methods.stream().filter(m -> m.name.equals("keyPressed")).findFirst().orElseThrow();
         var calls = new ArrayList<String>();
