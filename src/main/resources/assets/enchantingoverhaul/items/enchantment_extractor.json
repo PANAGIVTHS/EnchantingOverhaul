@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "enchantingoverhaul:item/enchantment_extractor"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "side": "minecraft:block/chiseled_copper",
+    "top": "minecraft:block/amethyst_block",
+    "bottom": "minecraft:block/polished_andesite"
+  }
+}

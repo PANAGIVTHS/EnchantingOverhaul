@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "enchantingoverhaul:enchantment_replicator",
+    "enchantingoverhaul:enchantment_extractor",
+    "enchantingoverhaul:enchanted_book_combiner"
+  ]
+}

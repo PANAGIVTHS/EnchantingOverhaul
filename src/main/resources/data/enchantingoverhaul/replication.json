@@ -1,0 +1,315 @@
+{
+  "schemaVersion": 1,
+  "cumulativeXp": [
+    20,
+    55,
+    110,
+    180,
+    275
+  ],
+  "cumulativeLapis": [
+    2,
+    5,
+    9,
+    14,
+    20
+  ],
+  "enchantments": [
+    {
+      "enchantmentId": "minecraft:protection",
+      "maxLevel": 4,
+      "catalyst": {
+        "itemId": "minecraft:shield"
+      }
+    },
+    {
+      "enchantmentId": "minecraft:fire_protection",
+      "maxLevel": 4,
+      "catalyst": {
+        "itemId": "minecraft:magma_cream"
+      }
+    },
+    {
+      "enchantmentId": "minecraft:blast_protection",
+      "maxLevel": 4,
+      "catalyst": {
+        "itemId": "minecraft:obsidian"
+      }
+    },
+    {
+      "enchantmentId": "minecraft:projectile_protection",
+      "maxLevel": 4,
+      "catalyst": {
+        "itemId": "minecraft:shield"
+      }
+    },
+    {
+      "enchantmentId": "minecraft:thorns",
+      "maxLevel": 3,
+      "catalyst": {
+        "itemId": "minecraft:cactus"
+      }
+    },
+    {
+      "enchantmentId": "minecraft:respiration",
+      "maxLevel": 3,
+      "catalyst": {
+        "itemId": "minecraft:nautilus_shell"
+      }
+    },
+    {
+      "enchantmentId": "minecraft:aqua_affinity",
+      "maxLevel": 1,
+      "catalyst": {
+        "itemId": "minecraft:prismarine_shard"
+      }
+    },
+    {
+      "enchantmentId": "minecraft:feather_falling",
+      "maxLevel": 4,
+      "catalyst": {
+        "itemId": "minecraft:feather"
+      }
+    },
+    {
+      "enchantmentId": "minecraft:depth_strider",
+      "maxLevel": 3,
+      "catalyst": {
+        "itemId": "minecraft:potion",
+        "potionId": "minecraft:swiftness"
+      }
+    },
+    {
+      "enchantmentId": "minecraft:frost_walker",
+      "maxLevel": 2,
+      "catalyst": {
+        "itemId": "minecraft:packed_ice"
+      }
+    },
+    {
+      "enchantmentId": "minecraft:soul_speed",
+      "maxLevel": 3,
+      "catalyst": {
+        "itemId": "minecraft:soul_soil"
+      }
+    },
+    {
+      "enchantmentId": "minecraft:swift_sneak",
+      "maxLevel": 3,
+      "catalyst": {
+        "itemId": "minecraft:sculk"
+      }
+    },
+    {
+      "enchantmentId": "minecraft:sharpness",
+      "maxLevel": 5,
+      "catalyst": {
+        "itemId": "minecraft:flint"
+      }
+    },
+    {
+      "enchantmentId": "minecraft:smite",
+      "maxLevel": 5,
+      "catalyst": {
+        "itemId": "minecraft:splash_potion",
+        "potionId": "minecraft:healing"
+      }
+    },
+    {
+      "enchantmentId": "minecraft:bane_of_arthropods",
+      "maxLevel": 5,
+      "catalyst": {
+        "itemId": "minecraft:potion",
+        "potionId": "minecraft:infested"
+      }
+    },
+    {
+      "enchantmentId": "minecraft:knockback",
+      "maxLevel": 2,
+      "catalyst": {
+        "itemId": "minecraft:piston"
+      }
+    },
+    {
+      "enchantmentId": "minecraft:fire_aspect",
+      "maxLevel": 2,
+      "catalyst": {
+        "itemId": "minecraft:blaze_powder"
+      }
+    },
+    {
+      "enchantmentId": "minecraft:looting",
+      "maxLevel": 3,
+      "catalyst": {
+        "itemId": "minecraft:rabbit_foot"
+      }
+    },
+    {
+      "enchantmentId": "minecraft:sweeping_edge",
+      "maxLevel": 3,
+      "catalyst": {
+        "itemId": "minecraft:wind_charge"
+      }
+    },
+    {
+      "enchantmentId": "minecraft:density",
+      "maxLevel": 5,
+      "catalyst": {
+        "itemId": "minecraft:iron_block"
+      }
+    },
+    {
+      "enchantmentId": "minecraft:breach",
+      "maxLevel": 4,
+      "catalyst": {
+        "itemId": "minecraft:iron_pickaxe"
+      }
+    },
+    {
+      "enchantmentId": "minecraft:wind_burst",
+      "maxLevel": 3,
+      "catalyst": {
+        "itemId": "minecraft:wind_charge"
+      }
+    },
+    {
+      "enchantmentId": "minecraft:efficiency",
+      "maxLevel": 5,
+      "catalyst": {
+        "itemId": "minecraft:redstone"
+      }
+    },
+    {
+      "enchantmentId": "minecraft:silk_touch",
+      "maxLevel": 1,
+      "catalyst": {
+        "itemId": "minecraft:honeycomb"
+      }
+    },
+    {
+      "enchantmentId": "minecraft:fortune",
+      "maxLevel": 3,
+      "catalyst": {
+        "itemId": "minecraft:emerald"
+      }
+    },
+    {
+      "enchantmentId": "minecraft:unbreaking",
+      "maxLevel": 3,
+      "catalyst": {
+        "itemId": "minecraft:obsidian"
+      }
+    },
+    {
+      "enchantmentId": "minecraft:mending",
+      "maxLevel": 1,
+      "catalyst": {
+        "itemId": "minecraft:ghast_tear"
+      },
+      "cumulativeXp": [
+        240
+      ],
+      "cumulativeLapis": [
+        18
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:power",
+      "maxLevel": 5,
+      "catalyst": {
+        "itemId": "minecraft:gunpowder"
+      }
+    },
+    {
+      "enchantmentId": "minecraft:punch",
+      "maxLevel": 2,
+      "catalyst": {
+        "itemId": "minecraft:slime_ball"
+      }
+    },
+    {
+      "enchantmentId": "minecraft:flame",
+      "maxLevel": 1,
+      "catalyst": {
+        "itemId": "minecraft:blaze_powder"
+      }
+    },
+    {
+      "enchantmentId": "minecraft:infinity",
+      "maxLevel": 1,
+      "catalyst": {
+        "itemId": "minecraft:ender_pearl"
+      }
+    },
+    {
+      "enchantmentId": "minecraft:quick_charge",
+      "maxLevel": 3,
+      "catalyst": {
+        "itemId": "minecraft:redstone"
+      }
+    },
+    {
+      "enchantmentId": "minecraft:multishot",
+      "maxLevel": 1,
+      "catalyst": {
+        "itemId": "minecraft:firework_rocket"
+      }
+    },
+    {
+      "enchantmentId": "minecraft:piercing",
+      "maxLevel": 4,
+      "catalyst": {
+        "itemId": "minecraft:pointed_dripstone"
+      }
+    },
+    {
+      "enchantmentId": "minecraft:loyalty",
+      "maxLevel": 3,
+      "catalyst": {
+        "itemId": "minecraft:lead"
+      }
+    },
+    {
+      "enchantmentId": "minecraft:riptide",
+      "maxLevel": 3,
+      "catalyst": {
+        "itemId": "minecraft:nautilus_shell"
+      }
+    },
+    {
+      "enchantmentId": "minecraft:channeling",
+      "maxLevel": 1,
+      "catalyst": {
+        "itemId": "minecraft:lightning_rod"
+      }
+    },
+    {
+      "enchantmentId": "minecraft:impaling",
+      "maxLevel": 5,
+      "catalyst": {
+        "itemId": "minecraft:prismarine_shard"
+      }
+    },
+    {
+      "enchantmentId": "minecraft:luck_of_the_sea",
+      "maxLevel": 3,
+      "catalyst": {
+        "itemId": "minecraft:nautilus_shell"
+      }
+    },
+    {
+      "enchantmentId": "minecraft:lure",
+      "maxLevel": 3,
+      "catalyst": {
+        "itemId": "minecraft:tropical_fish"
+      }
+    },
+    {
+      "enchantmentId": "minecraft:lunge",
+      "maxLevel": 3,
+      "catalyst": {
+        "itemId": "minecraft:wind_charge"
+      }
+    }
+  ]
+}

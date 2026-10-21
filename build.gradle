@@ -1,0 +1,53 @@
+plugins {
+    id 'net.fabricmc.fabric-loom' version "${loom_version}"
+}
+
+loom {
+    splitEnvironmentSourceSets()
+    mods {
+        enchantingoverhaul {
+            sourceSet sourceSets.main
+            sourceSet sourceSets.client
+        }
+    }
+}
+
+repositories { mavenCentral() }
+
+dependencies {
+    minecraft "com.mojang:minecraft:${minecraft_version}"
+    implementation "net.fabricmc:fabric-loader:${loader_version}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
+    testImplementation platform('org.junit:junit-bom:5.13.4')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+java {
+    withSourcesJar()
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
+}
+tasks.withType(JavaCompile).configureEach {
+    options.release = 25
+    options.encoding = 'UTF-8'
+    options.compilerArgs += ['-Xlint:deprecation', '-Xlint:unchecked']
+}
+def modVersion = project.version.toString()
+processResources {
+    inputs.property 'version', modVersion
+    filesMatching('fabric.mod.json') { expand version: modVersion }
+}
+test { useJUnitPlatform() }
+// Protect automation from accidentally starting a game or server.
+// The developer/player can opt in explicitly for their own manual sessions.
+def allowGameLaunch = providers.gradleProperty('allowGameLaunch').isPresent()
+tasks.configureEach {
+    if (name.toLowerCase().contains('gametest') || name.startsWith('run')) {
+        doFirst {
+            if (!allowGameLaunch) {
+                throw new GradleException('Game launch disabled. Manual player testing only; opt in with -PallowGameLaunch.')
+            }
+        }
+    }
+}
