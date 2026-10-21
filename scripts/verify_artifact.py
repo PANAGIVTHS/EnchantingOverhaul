@@ -12,7 +12,7 @@ def load(archive, path):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--mod', type=Path, default=Path('build/libs/enchantingoverhaul-0.1.0.jar'))
+    parser.add_argument('--mod', type=Path, default=Path('build/libs/enchantingoverhaul-0.2.1.jar'))
     parser.add_argument('--minecraft-common', type=Path, required=True)
     parser.add_argument('--minecraft-client', type=Path, required=True)
     args = parser.parse_args()
@@ -26,7 +26,7 @@ def main():
                 load(mod, path)
                 json_count += 1
         metadata = load(mod, 'fabric.mod.json')
-        assert metadata['version'] == '0.1.0'
+        assert metadata['version'] == '0.2.1'
         assert metadata['depends']['minecraft'] == '26.3'
         assert '${version}' not in mod.read('fabric.mod.json').decode()
         for kind, entries in metadata['entrypoints'].items():
@@ -50,10 +50,44 @@ def main():
             if 'potionId' in catalyst:
                 potion = catalyst['potionId'].split(':')[1]
                 # Vanilla potion registry IDs and translated effect names need not match.
-                assert potion.encode() in common.read('net/minecraft/world/item/alchemy/Potions.class'), catalyst
+                assert potion.encode() in common.read('net/minecraft/world/item/alchemy/PotionIds.class'), catalyst
                 assert f'item.minecraft.{item}.effect.{potion}' in lang, catalyst
+        synthesis = load(mod, 'data/enchantingoverhaul/synthesis.json')['recipes']
+        expected_upgrades = {(entry['enchantmentId'], level) for entry in definitions
+                             for level in range(1, entry['maxLevel'])}
+        actual_upgrades = {(recipe['enchantmentId'], recipe['inputLevel']) for recipe in synthesis}
+        assert len(synthesis) == len(actual_upgrades) == len(expected_upgrades) == 85
+        assert actual_upgrades == expected_upgrades
+        potion_class = common.read('net/minecraft/world/item/alchemy/PotionIds.class')
+        for recipe in synthesis:
+            assert recipe['enchantmentId'] not in curses
+            assert recipe['inputLevel'] + 1 <= vanilla[recipe['enchantmentId']]['max_level']
+            for ingredient in recipe['ingredients']:
+                assert ingredient['count'] > 0
+                for identity in ingredient['itemIds']:
+                    namespace, item = identity.split(':')
+                    assert f'assets/{namespace}/items/{item}.json' in client_names, identity
+                    if ingredient.get('potionId'):
+                        potion = ingredient['potionId'].split(':')[1]
+                        assert potion.encode() in potion_class, ingredient
+                        effect = potion.removeprefix('strong_').removeprefix('long_')
+                        assert f'item.minecraft.{item}.effect.{effect}' in lang, ingredient
+        costs = load(mod, 'data/enchantingoverhaul/extraction.json')
+        assert costs['extractionXp'] == [55, 160, 280, 441, 679]
+        assert costs['purificationXp'] == 315
         blocks = ('enchantment_replicator', 'enchantment_extractor', 'enchanted_book_combiner')
         translations = load(mod, 'assets/enchantingoverhaul/lang/en_us.json')
+        boosted = {ingredient['potionId'] for recipe in synthesis for ingredient in recipe['ingredients']
+                   if ingredient.get('potionId', '').startswith('minecraft:strong_')}
+        assert boosted == {'minecraft:strong_strength', 'minecraft:strong_swiftness', 'minecraft:strong_healing'}
+        assert lang['potion.potency.1'] == 'II'
+        assert 'enchantingoverhaul.potion.strong' in translations
+        assert 'enchantingoverhaul.potion.extended' in translations
+        # Non-bootstrapping linkage audit: both previews use the variant-aware bridge.
+        for screen in ('CombinerScreen', 'ReplicatorScreen'):
+            assert b'catalystName' in mod.read(f'dev/enchantingoverhaul/client/{screen}.class'), screen
+        assert b'getAmplifier' in mod.read('dev/enchantingoverhaul/game/Enchantments.class')
+        assert 'dev/enchantingoverhaul/core/PotionRequirementLabel.class' in mod_names
         for block in blocks:
             prefix = 'assets/enchantingoverhaul/'
             assert 'block.enchantingoverhaul.' + block in translations
@@ -87,6 +121,7 @@ def main():
         print(f'PASS: {json_count} packaged JSON resources parsed; entrypoints and Java 25 class versions checked.')
         print('PASS: exact 41 non-curse catalysts/maxima cover the actual 43-enchantment Minecraft 26.3 data set.')
         print('PASS: all catalyst item assets and exact potion translation identities exist in vanilla.')
+        print('PASS: all 85 synthesis upgrades cover exactly the vanilla maxima, with real vanilla ingredients/potion variants; extraction/purification fees match.')
         print('PASS: all 3 workstation blockstates, model/texture references, item definitions, translations and self-drop loot tables checked.')
         print(f'PASS: {main_classes} common mod classes have no direct client-class linkage; no test classes/unapproved recipes packaged.')
         print('NOT TESTED: game bootstrap, runtime registries/rendering, inventory persistence, interaction, networking or multiplayer.')

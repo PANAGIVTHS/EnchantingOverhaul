@@ -1,7 +1,6 @@
 package dev.enchantingoverhaul.block;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -12,7 +11,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
-/** Common physical foundation; only the Replicator has an operation menu in this checkpoint. */
+/** Persistent physical workstation; each kind opens its server-authoritative operation menu. */
 public final class WorkstationBlock extends BaseEntityBlock {
     private final Kind kind;
 
@@ -33,21 +32,15 @@ public final class WorkstationBlock extends BaseEntityBlock {
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos,
                                                Player player, BlockHitResult hitResult) {
-        if (level instanceof ServerLevel) {
-            if (kind == Kind.REPLICATOR) {
-                if (level.getBlockEntity(pos) instanceof WorkstationBlockEntity workstation) {
-                    player.openMenu(workstation);
-                }
-            } else {
-                player.sendOverlayMessage(Component.translatable("message.enchantingoverhaul.not_implemented"));
-            }
+        if (level instanceof ServerLevel && level.getBlockEntity(pos) instanceof WorkstationBlockEntity workstation) {
+            player.openMenu(workstation);
         }
         return InteractionResult.SUCCESS;
     }
 
     public enum Kind {
         REPLICATOR("enchantment_replicator", 3),
-        EXTRACTOR("enchantment_extractor", 3),
+        EXTRACTOR("enchantment_extractor", 4),
         COMBINER("enchanted_book_combiner", 23);
 
         public final String id;

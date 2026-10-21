@@ -39,17 +39,17 @@ public final class ReplicatorMenu extends AbstractContainerMenu {
         data.set(SELECTED, -1);
         data.set(LEVEL, 1);
         data.set(STATUS, ReplicationRules.FailureReason.INVALID_REQUEST.ordinal());
-        addSlot(new Slot(inventory, 0, 18, 38) {
+        addSlot(new Slot(inventory, 0, 20, 40) {
             @Override public int getMaxStackSize() { return 1; }
             @Override public boolean mayPlace(ItemStack stack) {
                 return Enchantments.isBook(stack) || DEFINITIONS.stream().anyMatch(d ->
                         Enchantments.find(owner.level(), d.enchantmentId()).map(e -> e.value().isSupportedItem(stack)).orElse(false));
             }
         });
-        addSlot(new Slot(inventory, 1, 62, 38) {
+        addSlot(new Slot(inventory, 1, 60, 40) {
             @Override public boolean mayPlace(ItemStack stack) { return stack.is(Items.LAPIS_LAZULI); }
         });
-        addSlot(new Slot(inventory, 2, 106, 38));
+        addSlot(new Slot(inventory, 2, 100, 40));
         addStandardInventorySlots(playerInventory, 8, 150);
         addDataSlots(data);
     }

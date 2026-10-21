@@ -3,6 +3,8 @@ package dev.enchantingoverhaul;
 import dev.enchantingoverhaul.block.WorkstationBlock;
 import dev.enchantingoverhaul.block.WorkstationBlockEntity;
 import dev.enchantingoverhaul.menu.ReplicatorMenu;
+import dev.enchantingoverhaul.menu.ExtractorMenu;
+import dev.enchantingoverhaul.menu.CombinerMenu;
 import java.util.Set;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.minecraft.core.Registry;
@@ -28,6 +30,8 @@ public final class ModContent {
     public static WorkstationBlock COMBINER;
     public static BlockEntityType<WorkstationBlockEntity> WORKSTATION_ENTITY;
     public static MenuType<ReplicatorMenu> REPLICATOR_MENU;
+    public static MenuType<ExtractorMenu> EXTRACTOR_MENU;
+    public static MenuType<CombinerMenu> COMBINER_MENU;
 
     private static boolean registered;
 
@@ -46,6 +50,12 @@ public final class ModContent {
         REPLICATOR_MENU = Registry.register(BuiltInRegistries.MENU, id("enchantment_replicator"),
                 new MenuType<>((containerId, inventory) ->
                         new ReplicatorMenu(containerId, inventory, new SimpleContainer(3)), FeatureFlags.VANILLA_SET));
+        EXTRACTOR_MENU = Registry.register(BuiltInRegistries.MENU, id("enchantment_extractor"),
+                new MenuType<>((containerId, inventory) ->
+                        new ExtractorMenu(containerId, inventory, new SimpleContainer(2)), FeatureFlags.VANILLA_SET));
+        COMBINER_MENU = Registry.register(BuiltInRegistries.MENU, id("enchanted_book_combiner"),
+                new MenuType<>((containerId, inventory) ->
+                        new CombinerMenu(containerId, inventory, new SimpleContainer(23)), FeatureFlags.VANILLA_SET));
         CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(entries -> {
             entries.accept(REPLICATOR);
             entries.accept(EXTRACTOR);

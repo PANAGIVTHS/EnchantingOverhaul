@@ -1,0 +1,2027 @@
+{
+  "schemaVersion": 1,
+  "recipes": [
+    {
+      "enchantmentId": "minecraft:protection",
+      "inputLevel": 1,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:leather"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:iron_ingot"
+          ],
+          "count": 2,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:protection",
+      "inputLevel": 2,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:shield"
+          ],
+          "count": 1,
+          "standardEquipment": true
+        },
+        {
+          "itemIds": [
+            "minecraft:obsidian"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:protection",
+      "inputLevel": 3,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:diamond"
+          ],
+          "count": 2,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:potion"
+          ],
+          "count": 1,
+          "standardEquipment": false,
+          "potionId": "minecraft:turtle_master"
+        },
+        {
+          "itemIds": [
+            "minecraft:obsidian"
+          ],
+          "count": 2,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:fire_protection",
+      "inputLevel": 1,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:magma_cream"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:nether_brick"
+          ],
+          "count": 2,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:fire_protection",
+      "inputLevel": 2,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:obsidian"
+          ],
+          "count": 2,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:potion"
+          ],
+          "count": 1,
+          "standardEquipment": false,
+          "potionId": "minecraft:fire_resistance"
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:fire_protection",
+      "inputLevel": 3,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:golden_apple"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:potion"
+          ],
+          "count": 1,
+          "standardEquipment": false,
+          "potionId": "minecraft:fire_resistance"
+        },
+        {
+          "itemIds": [
+            "minecraft:blaze_rod"
+          ],
+          "count": 2,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:blast_protection",
+      "inputLevel": 1,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:gunpowder"
+          ],
+          "count": 8,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:iron_ingot"
+          ],
+          "count": 2,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:blast_protection",
+      "inputLevel": 2,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:tnt"
+          ],
+          "count": 2,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:obsidian"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:blast_protection",
+      "inputLevel": 3,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:blast_furnace"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:diamond"
+          ],
+          "count": 2,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:tnt"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:projectile_protection",
+      "inputLevel": 1,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:arrow"
+          ],
+          "count": 8,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:leather"
+          ],
+          "count": 2,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:projectile_protection",
+      "inputLevel": 2,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:shield"
+          ],
+          "count": 1,
+          "standardEquipment": true
+        },
+        {
+          "itemIds": [
+            "minecraft:string"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:iron_ingot"
+          ],
+          "count": 2,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:projectile_protection",
+      "inputLevel": 3,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:shield"
+          ],
+          "count": 1,
+          "standardEquipment": true
+        },
+        {
+          "itemIds": [
+            "minecraft:amethyst_shard"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:diamond"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:thorns",
+      "inputLevel": 1,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:cactus"
+          ],
+          "count": 8,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:sweet_berries"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:thorns",
+      "inputLevel": 2,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:pointed_dripstone"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:diamond"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:cactus"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:respiration",
+      "inputLevel": 1,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:kelp"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:pufferfish"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:respiration",
+      "inputLevel": 2,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:potion"
+          ],
+          "count": 1,
+          "standardEquipment": false,
+          "potionId": "minecraft:water_breathing"
+        },
+        {
+          "itemIds": [
+            "minecraft:prismarine_crystals"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:diamond"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:feather_falling",
+      "inputLevel": 1,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:feather"
+          ],
+          "count": 8,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:slime_ball"
+          ],
+          "count": 2,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:feather_falling",
+      "inputLevel": 2,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:hay_block"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:phantom_membrane"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:white_wool",
+            "minecraft:orange_wool",
+            "minecraft:magenta_wool",
+            "minecraft:light_blue_wool",
+            "minecraft:yellow_wool",
+            "minecraft:lime_wool",
+            "minecraft:pink_wool",
+            "minecraft:gray_wool",
+            "minecraft:light_gray_wool",
+            "minecraft:cyan_wool",
+            "minecraft:purple_wool",
+            "minecraft:blue_wool",
+            "minecraft:brown_wool",
+            "minecraft:green_wool",
+            "minecraft:red_wool",
+            "minecraft:black_wool"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:feather_falling",
+      "inputLevel": 3,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:potion"
+          ],
+          "count": 1,
+          "standardEquipment": false,
+          "potionId": "minecraft:slow_falling"
+        },
+        {
+          "itemIds": [
+            "minecraft:phantom_membrane"
+          ],
+          "count": 2,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:diamond"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:depth_strider",
+      "inputLevel": 1,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:sugar"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:kelp"
+          ],
+          "count": 8,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:depth_strider",
+      "inputLevel": 2,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:nautilus_shell"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:potion"
+          ],
+          "count": 1,
+          "standardEquipment": false,
+          "potionId": "minecraft:strong_swiftness"
+        },
+        {
+          "itemIds": [
+            "minecraft:prismarine_shard"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:frost_walker",
+      "inputLevel": 1,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:blue_ice"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:potion"
+          ],
+          "count": 1,
+          "standardEquipment": false,
+          "potionId": "minecraft:water_breathing"
+        },
+        {
+          "itemIds": [
+            "minecraft:diamond"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:soul_speed",
+      "inputLevel": 1,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:soul_sand"
+          ],
+          "count": 8,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:soul_torch"
+          ],
+          "count": 2,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:soul_speed",
+      "inputLevel": 2,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:soul_lantern"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:ghast_tear"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:diamond"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:swift_sneak",
+      "inputLevel": 1,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:sculk"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:white_wool",
+            "minecraft:orange_wool",
+            "minecraft:magenta_wool",
+            "minecraft:light_blue_wool",
+            "minecraft:yellow_wool",
+            "minecraft:lime_wool",
+            "minecraft:pink_wool",
+            "minecraft:gray_wool",
+            "minecraft:light_gray_wool",
+            "minecraft:cyan_wool",
+            "minecraft:purple_wool",
+            "minecraft:blue_wool",
+            "minecraft:brown_wool",
+            "minecraft:green_wool",
+            "minecraft:red_wool",
+            "minecraft:black_wool"
+          ],
+          "count": 8,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:sculk_sensor"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:swift_sneak",
+      "inputLevel": 2,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:echo_shard"
+          ],
+          "count": 2,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:sculk_shrieker"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:diamond"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:sharpness",
+      "inputLevel": 1,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:flint"
+          ],
+          "count": 2,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:iron_ingot"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:sharpness",
+      "inputLevel": 2,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:iron_ingot"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:amethyst_shard"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:sharpness",
+      "inputLevel": 3,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:diamond"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:quartz"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:sharpness",
+      "inputLevel": 4,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:netherite_scrap"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:potion"
+          ],
+          "count": 1,
+          "standardEquipment": false,
+          "potionId": "minecraft:strong_strength"
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:smite",
+      "inputLevel": 1,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:bone_block"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:rotten_flesh"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:smite",
+      "inputLevel": 2,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:soul_sand"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:gold_ingot"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:smite",
+      "inputLevel": 3,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:splash_potion"
+          ],
+          "count": 1,
+          "standardEquipment": false,
+          "potionId": "minecraft:healing"
+        },
+        {
+          "itemIds": [
+            "minecraft:glistering_melon_slice"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:smite",
+      "inputLevel": 4,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:ghast_tear"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:splash_potion"
+          ],
+          "count": 1,
+          "standardEquipment": false,
+          "potionId": "minecraft:strong_healing"
+        },
+        {
+          "itemIds": [
+            "minecraft:golden_apple"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:bane_of_arthropods",
+      "inputLevel": 1,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:spider_eye"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:brown_mushroom"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:bane_of_arthropods",
+      "inputLevel": 2,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:fermented_spider_eye"
+          ],
+          "count": 2,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:string"
+          ],
+          "count": 8,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:bane_of_arthropods",
+      "inputLevel": 3,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:potion"
+          ],
+          "count": 1,
+          "standardEquipment": false,
+          "potionId": "minecraft:infested"
+        },
+        {
+          "itemIds": [
+            "minecraft:diamond"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:cobweb"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:bane_of_arthropods",
+      "inputLevel": 4,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:potion"
+          ],
+          "count": 1,
+          "standardEquipment": false,
+          "potionId": "minecraft:infested"
+        },
+        {
+          "itemIds": [
+            "minecraft:fermented_spider_eye"
+          ],
+          "count": 2,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:spider_eye"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:knockback",
+      "inputLevel": 1,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:slime_ball"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:piston"
+          ],
+          "count": 2,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:redstone"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:fire_aspect",
+      "inputLevel": 1,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:blaze_rod"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:fire_charge"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:potion"
+          ],
+          "count": 1,
+          "standardEquipment": false,
+          "potionId": "minecraft:fire_resistance"
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:looting",
+      "inputLevel": 1,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:gold_block"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:rabbit_foot"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:emerald"
+          ],
+          "count": 2,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:looting",
+      "inputLevel": 2,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:diamond"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:rabbit_foot"
+          ],
+          "count": 2,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:golden_apple"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:sweeping_edge",
+      "inputLevel": 1,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:wind_charge"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:feather"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:iron_ingot"
+          ],
+          "count": 2,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:sweeping_edge",
+      "inputLevel": 2,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:breeze_rod"
+          ],
+          "count": 2,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:diamond"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:wind_charge"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:density",
+      "inputLevel": 1,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:iron_block"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:deepslate"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:density",
+      "inputLevel": 2,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:iron_block"
+          ],
+          "count": 2,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:obsidian"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:density",
+      "inputLevel": 3,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:diamond_block"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:amethyst_block"
+          ],
+          "count": 2,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:density",
+      "inputLevel": 4,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:netherite_scrap"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:obsidian"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:wind_charge"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:breach",
+      "inputLevel": 1,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:iron_pickaxe"
+          ],
+          "count": 1,
+          "standardEquipment": true
+        },
+        {
+          "itemIds": [
+            "minecraft:copper_block"
+          ],
+          "count": 2,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:breach",
+      "inputLevel": 2,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:diamond"
+          ],
+          "count": 2,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:iron_block"
+          ],
+          "count": 2,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:breach",
+      "inputLevel": 3,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:netherite_scrap"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:diamond_pickaxe"
+          ],
+          "count": 1,
+          "standardEquipment": true
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:wind_burst",
+      "inputLevel": 1,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:wind_charge"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:breeze_rod"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:wind_burst",
+      "inputLevel": 2,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:breeze_rod"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:ominous_bottle"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:efficiency",
+      "inputLevel": 1,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:copper_ingot"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:redstone"
+          ],
+          "count": 2,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:efficiency",
+      "inputLevel": 2,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:piston"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:redstone_block"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:efficiency",
+      "inputLevel": 3,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:diamond"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:amethyst_shard"
+          ],
+          "count": 2,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:efficiency",
+      "inputLevel": 4,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:netherite_scrap"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:potion"
+          ],
+          "count": 1,
+          "standardEquipment": false,
+          "potionId": "minecraft:strong_swiftness"
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:fortune",
+      "inputLevel": 1,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:emerald_block"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:rabbit_foot"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:fortune",
+      "inputLevel": 2,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:diamond"
+          ],
+          "count": 2,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:gold_block"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:rabbit_foot"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:unbreaking",
+      "inputLevel": 1,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:obsidian"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:iron_block"
+          ],
+          "count": 2,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:unbreaking",
+      "inputLevel": 2,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:diamond"
+          ],
+          "count": 2,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:ancient_debris"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:obsidian"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:power",
+      "inputLevel": 1,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:flint"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:arrow"
+          ],
+          "count": 8,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:power",
+      "inputLevel": 2,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:bow"
+          ],
+          "count": 1,
+          "standardEquipment": true
+        },
+        {
+          "itemIds": [
+            "minecraft:gunpowder"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:string"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:power",
+      "inputLevel": 3,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:diamond"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:firework_star"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:amethyst_shard"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:power",
+      "inputLevel": 4,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:netherite_scrap"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:firework_rocket"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:potion"
+          ],
+          "count": 1,
+          "standardEquipment": false,
+          "potionId": "minecraft:strong_strength"
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:punch",
+      "inputLevel": 1,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:slime_ball"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:piston"
+          ],
+          "count": 2,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:arrow"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:quick_charge",
+      "inputLevel": 1,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:redstone_block"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:tripwire_hook"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:copper_ingot"
+          ],
+          "count": 2,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:quick_charge",
+      "inputLevel": 2,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:redstone_block"
+          ],
+          "count": 2,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:crossbow"
+          ],
+          "count": 1,
+          "standardEquipment": true
+        },
+        {
+          "itemIds": [
+            "minecraft:diamond"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:piercing",
+      "inputLevel": 1,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:pointed_dripstone"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:arrow"
+          ],
+          "count": 8,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:piercing",
+      "inputLevel": 2,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:iron_block"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:amethyst_shard"
+          ],
+          "count": 2,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:pointed_dripstone"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:piercing",
+      "inputLevel": 3,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:diamond"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:crossbow"
+          ],
+          "count": 1,
+          "standardEquipment": true
+        },
+        {
+          "itemIds": [
+            "minecraft:iron_block"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:loyalty",
+      "inputLevel": 1,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:lead"
+          ],
+          "count": 2,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:compass"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:loyalty",
+      "inputLevel": 2,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:compass"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:ender_pearl"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:prismarine_crystals"
+          ],
+          "count": 2,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:riptide",
+      "inputLevel": 1,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:kelp"
+          ],
+          "count": 8,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:prismarine_shard"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:riptide",
+      "inputLevel": 2,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:heart_of_the_sea"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:potion"
+          ],
+          "count": 1,
+          "standardEquipment": false,
+          "potionId": "minecraft:strong_swiftness"
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:impaling",
+      "inputLevel": 1,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:prismarine_shard"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:cod"
+          ],
+          "count": 8,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:impaling",
+      "inputLevel": 2,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:prismarine_crystals"
+          ],
+          "count": 2,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:pointed_dripstone"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:impaling",
+      "inputLevel": 3,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:diamond"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:nautilus_shell"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:prismarine_crystals"
+          ],
+          "count": 2,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:impaling",
+      "inputLevel": 4,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:heart_of_the_sea"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:diamond"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:potion"
+          ],
+          "count": 1,
+          "standardEquipment": false,
+          "potionId": "minecraft:water_breathing"
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:luck_of_the_sea",
+      "inputLevel": 1,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:rabbit_foot"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:cod"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:luck_of_the_sea",
+      "inputLevel": 2,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:heart_of_the_sea"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:emerald_block"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:lure",
+      "inputLevel": 1,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:tropical_fish"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:string"
+          ],
+          "count": 8,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:lure",
+      "inputLevel": 2,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:pufferfish"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:nautilus_shell"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:potion"
+          ],
+          "count": 1,
+          "standardEquipment": false,
+          "potionId": "minecraft:water_breathing"
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:lunge",
+      "inputLevel": 1,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:wind_charge"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:sugar"
+          ],
+          "count": 4,
+          "standardEquipment": false
+        }
+      ]
+    },
+    {
+      "enchantmentId": "minecraft:lunge",
+      "inputLevel": 2,
+      "ingredients": [
+        {
+          "itemIds": [
+            "minecraft:breeze_rod"
+          ],
+          "count": 2,
+          "standardEquipment": false
+        },
+        {
+          "itemIds": [
+            "minecraft:potion"
+          ],
+          "count": 1,
+          "standardEquipment": false,
+          "potionId": "minecraft:strong_swiftness"
+        },
+        {
+          "itemIds": [
+            "minecraft:diamond"
+          ],
+          "count": 1,
+          "standardEquipment": false
+        }
+      ]
+    }
+  ]
+}

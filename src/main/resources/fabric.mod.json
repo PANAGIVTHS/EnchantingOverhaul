@@ -3,7 +3,7 @@
   "id": "enchantingoverhaul",
   "version": "${version}",
   "name": "Enchanting Overhaul",
-  "description": "Physical enchantment libraries and deterministic enchanting progression. Development checkpoint: library and Replicator.",
+  "description": "Physical enchantment libraries and deterministic enchanting progression. Development checkpoint: library, replication, selective extraction, purification and book synthesis.",
   "environment": "*",
   "entrypoints": {
     "main": ["dev.enchantingoverhaul.EnchantingOverhaul"],

@@ -1,6 +1,8 @@
 package dev.enchantingoverhaul.game;
 
 import dev.enchantingoverhaul.core.Catalyst;
+import dev.enchantingoverhaul.core.PotionRequirementLabel;
+import net.minecraft.network.chat.Component;
 import java.util.Optional;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
@@ -58,6 +60,17 @@ public final class Enchantments {
             stack.set(DataComponents.POTION_CONTENTS, new PotionContents(potion));
         }
         return stack;
+    }
+    /** Requirement names must distinguish Strength II from the base Potion of Strength. */
+    public static Component catalystName(Catalyst catalyst) {
+        var stack = catalystStack(catalyst);
+        var name = stack.getHoverName().copy();
+        var contents = stack.get(DataComponents.POTION_CONTENTS);
+        var amplifiers = contents == null || contents.potion().isEmpty() ? java.util.List.<Integer>of()
+                : contents.potion().get().value().getEffects().stream().map(e -> e.getAmplifier()).toList();
+        PotionRequirementLabel.qualifierKey(catalyst.potionId(), amplifiers)
+                .ifPresent(key -> name.append(" ").append(Component.translatable(key)));
+        return name;
     }
     public static ItemStack appliedCopy(ItemStack original, Holder<Enchantment> enchantment, int level) {
         ItemStack result = original.is(Items.BOOK) ? original.transmuteCopy(Items.ENCHANTED_BOOK, 1) : original.copy();

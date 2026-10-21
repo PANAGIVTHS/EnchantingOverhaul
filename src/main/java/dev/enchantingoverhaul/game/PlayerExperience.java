@@ -1,6 +1,7 @@
 package dev.enchantingoverhaul.game;
 
 import dev.enchantingoverhaul.core.ExperienceMath;
+import dev.enchantingoverhaul.core.ExperiencePayment;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.network.protocol.game.ClientboundSetExperiencePacket;
 import net.minecraft.world.entity.player.Player;
@@ -11,7 +12,15 @@ public final class PlayerExperience {
     public static long available(Player player) {
         return ExperienceMath.points(player.experienceLevel, player.experienceProgress);
     }
+    public static int effectiveCost(Player player, int amount) {
+        return ExperiencePayment.cost(player.hasInfiniteMaterials(), amount);
+    }
+    public static boolean canAfford(Player player, int amount) {
+        return ExperiencePayment.canAfford(player.hasInfiniteMaterials(), available(player), amount);
+    }
     public static void debit(Player player, int amount) {
+        amount = effectiveCost(player, amount);
+        if (amount == 0) return; // Creative must not touch levels, bar or stale totalExperience.
         long before = available(player);
         if (amount < 0 || before < amount) throw new IllegalArgumentException("Insufficient XP");
         var remaining = ExperienceMath.state(before - amount);

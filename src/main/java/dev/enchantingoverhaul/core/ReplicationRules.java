@@ -23,7 +23,7 @@ public final class ReplicationRules {
         NONE, INVALID_REQUEST, UNKNOWN_ENCHANTMENT, CURSE_NOT_REPLICABLE,
         INVALID_TARGET_COUNT, INVALID_LEVEL, LEVEL_NOT_INCREASED, LEVEL_NOT_UNLOCKED,
         NOT_APPLICABLE, INCOMPATIBLE, WRONG_LAPIS, INSUFFICIENT_LAPIS,
-        WRONG_CATALYST, INSUFFICIENT_CATALYST, INSUFFICIENT_XP
+        WRONG_CATALYST, INSUFFICIENT_CATALYST, INSUFFICIENT_XP, NO_BOTTLE_SPACE
     }
 
     /** cost is null for semantic failures, but retained for valid previews lacking payment.
@@ -36,7 +36,9 @@ public final class ReplicationRules {
         public boolean accepted() { return failure == FailureReason.NONE; }
     }
 
-    public Plan plan(Request request) {
+    public Plan plan(Request request) { return plan(request, false); }
+
+    public Plan plan(Request request, boolean creative) {
         if (request == null || request.enchantmentId() == null || request.knowledge() == null || request.resources() == null
                 || request.availableRawXp() < 0 || request.resources().lapisCount() < 0 || request.resources().catalystCount() < 0) {
             return reject(FailureReason.INVALID_REQUEST);
@@ -52,7 +54,8 @@ public final class ReplicationRules {
         if (!request.knowledge().unlocks(request.enchantmentId(), request.desiredLevel())) return reject(FailureReason.LEVEL_NOT_UNLOCKED);
         if (!request.applicable()) return reject(FailureReason.NOT_APPLICABLE);
         if (!request.compatible()) return reject(FailureReason.INCOMPATIBLE);
-        ReplicationCost cost = definition.cost(request.currentLevel(), request.desiredLevel());
+        ReplicationCost nominal = definition.cost(request.currentLevel(), request.desiredLevel());
+        ReplicationCost cost = new ReplicationCost(ExperiencePayment.cost(creative, nominal.rawXp()), nominal.lapis(), nominal.catalystCount());
         ResourceSlots slots = request.resources();
         if (slots.lapisCount() < cost.lapis()) return new Plan(FailureReason.INSUFFICIENT_LAPIS, cost);
         if (!"minecraft:lapis_lazuli".equals(slots.lapisItemId())) return new Plan(FailureReason.WRONG_LAPIS, cost);

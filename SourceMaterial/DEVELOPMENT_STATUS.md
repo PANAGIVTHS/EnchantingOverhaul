@@ -1,51 +1,49 @@
 # Development status
 
-## Current milestone — library / Replicator checkpoint
-Stages 1–3 implemented for first player testing; final read-only review pending before checkpoint handoff. This is **not the complete survival overhaul**. `SourceMaterial/README.md` is unchanged and remains authoritative. Repository initially contained only the design and two UI mockups; no existing code or Git metadata.
+## Current milestone — stages 4–5, review before player checkpoint
+Library/Replicator were player-tested: all requested checks passed except search-field E closing and creative XP requirements. Player approved continuing and confirmed empty glass-bottle returns. Those fixes plus selective extraction, purification and full synthesis are implemented. Final independent review is pending before the manual-checkpoint handoff. **This is not yet the complete survival replacement.** `SourceMaterial/README.md` remains unchanged/authoritative.
 
-### Implemented
-- Fabric project + checked Gradle wrapper; three workstation blocks/items, basic vanilla-texture cube models, item definitions, pickaxe tag and self-drop loot tables.
-- Persistent `WorkstationBlockEntity` inventory: Replicator 3 slots; Extractor foundation 3 slots; Combiner foundation 23 slots (2 inputs, output, 20 ingredients). Vanilla container removal handles dropped contents once.
-- Inclusive five-block **cube** in all axes (11×11×11), including above/below and through walls, per implementation prompt. No connected-shelf expansion, ownership layer or forced chunk loading.
-- Actual vanilla chiseled bookshelf books define shared knowledge. Only clean single-enchantment books qualify; highest natural level wins and grants all lower levels. Menus rescan each server tick; confirmation always rescans/revalidates live state.
-- All 41 non-curse catalysts/maxima; proposed cumulative XP/lapis and special Mending costs; strict base potion variants. Potion of Infestation's actual registry ID is `minecraft:infested`.
-- Replicator has dedicated target/lapis/catalyst slots; searchable/paginated compatible choices, explicit I–V selection, exact resource preview and rejection messages. One enchantment per click; target remains inserted; other enchantments/components preserved by copy + enchantment-component update. No implicit player-inventory materials.
-- Server-side applicability and mutual exclusions delegate to vanilla. No equal-level/downgrade operations or curse replication; cursed books are not valid targets/blueprints. Cursed equipment keeps ordinary curse behavior.
-- Existing-level upgrades pay only the XP/lapis difference and no catalyst. Missing payment/knowledge, invalid target/count or incompatibility rejects before mutation; item/payment copies prepared before commit. Repeated same-level clicks cannot charge again.
-- Raw XP uses visible level/bar, not stale `totalExperience`; integer debit reconstructs the vanilla curve and explicitly synchronizes the XP display, including after `/experience` commands.
+## Implemented / key decisions
+- Target unchanged: Minecraft **26.3**, Java **25**, Fabric Loader **0.19.5**, Fabric API **0.164.0+26.3**, Loom **1.19.2**, checked Gradle wrapper **9.8.0**. Mod checkpoint version **0.2.0**.
+- Replicator search handles focused text input before container shortcuts; Escape closes; clicking outside clears focus and restores normal inventory-key behavior. Actual keyboard interaction still needs player retest.
+- Creative bypasses **XP only**, with zero XP preview/debit for replication, extraction and purification. Material, blueprint, compatibility and maximum-level requirements remain enforced.
+- One empty glass bottle per consumed potion/splash/lingering potion, Dragon's Breath or Ominous Bottle. Replicator returns into catalyst slot; Extractor reuses emptied reagent slot or dedicated bottle output; Combiner returns into its own ingredient storage. No implicit player inventory use or dropping. Insufficient return room rejects the entire operation.
+- Extractor: select one beneficial enchantment, fees **55/160/280/441/679 raw XP**, exactly one book output, source retained with other enchantments/components. Full output, insufficient XP, invalid levels and single-enchantment-book conversion reject. Any curse in applied OR stored enchantments blocks extraction.
+- Separate Purify: **1 Dragon's Breath + 315 raw XP** (XP waived in creative), removes all curses from both enchantment components, preserves beneficial enchants/base item/unrelated data, returns one empty bottle. Curse-only enchanted books remain that same base item with empty enchantments; no invented conversion/refund.
+- Combiner: two clean single-enchantment books with matching type/level; all **85** documented upgrades across 41 enchantments; 20 internal ingredient slots, take-only output. Exact potion variants and standard pristine/unenchanted equipment ingredients; wool accepts any/mixed colors. Two books + exact materials consumed; surplus retained; one next-level book; no additional XP/lapis, randomness, provenance restrictions or levels above vanilla maxima.
+- All operations rebuild validation from live server state and prepare transformed/payment copies before committing. Outputs are not auto-crafted on input insertion. Repeated clicks revalidate, stale selections cannot authorize nonexistent enchants, and occupied outputs block duplication.
+- All three minimal screens are 320×232, with layouts separate from rules. Appearance is provisional; no game rendering or visual testing by the agent.
+- Existing library behavior retained: actual clean single-enchantment bookshelf books, highest level includes lower levels; inclusive five-block cube in all axes through walls; no forced chunks/per-player knowledge/ownership system.
 
-### Key files / architecture
-- `core/`: Minecraft-independent catalog, costs, validation plans, library aggregation/range and XP curve.
-- `data/enchantingoverhaul/replication.json`: bundled balancing/catalyst data (not a runtime-reloadable datapack yet).
-- `game/`: library scan, vanilla enchantment/component bridge, XP debit, prepared replication transaction.
-- `menu/ReplicatorMenu`: vanilla menu slot/data synchronization + bounded button IDs; no custom inventory packets. `client/ReplicatorScreen`: provisional functional interface based on supplied mockup, not final visuals.
-- `ModContent` and `block/`: registration, inventories and persistence.
-- `scripts/verify_artifact.py`: non-game resource/version/vanilla-coverage audit.
+## Architecture / important files
+- `core/Replication*`, `LibraryKnowledge`, `ExperienceMath`: prior pure economy/library logic.
+- New `core/ExperiencePayment`, `BottleAccounting`: testable creative XP and immutable bottle-return accounting. `game/BottledIngredients`: prepares real slot copies without mutation.
+- `core/Extraction*`, `game/ExtractionService`, `menu/ExtractorMenu`, `client/ExtractorScreen`: selective extraction/purification.
+- `core/Synthesis*`, `game/SynthesisService`, `menu/CombinerMenu`, `client/CombinerScreen`: matching, consumption, result and preview.
+- Bundled `data/enchantingoverhaul/{replication,extraction,synthesis}.json`: balancing/recipes; not runtime-reloadable datapacks yet.
+- `ModContent`, `block/WorkstationBlock*`: registrations/persistence. Extractor inventory grew safely from 3 to **4** slots (target, breath, book output, bottle output); Replicator 3 and Combiner 23 unchanged. Vanilla block-entity removal drops contents once.
+- Vanilla menu slots/data/bounded buttons synchronize per-viewer menus; clients never supply costs or output stacks.
 
-## Build / verification actually run
-- Target: **Minecraft 26.3**, **Java 25**, **Fabric Loader 0.19.5**, **Fabric API 0.164.0+26.3**, **Loom 1.19.2**, **Gradle 9.8.0**. Java installed via existing `/opt/hermes-tools` infrastructure. Loom required upgrading the initial 9.7.1 wrapper.
-- Last build: `./gradlew clean build --no-daemon --console=plain --warning-mode all` — **BUILD SUCCESSFUL**, no compiler/deprecation warnings in final clean run.
-- **845 JUnit cases passed**, 0 failures/errors/skips: catalog 58, library 15, planner 766, XP curve 6. Includes every upgrade path/resource threshold, exact catalyst definitions, invalid/over-max levels, absent knowledge, curse/compatibility flags, range boundaries, and 50,000 XP round trips.
-- Artifact audit passed against downloaded vanilla 26.3 JARs: actual 43 enchantments = 41 supported + 2 curses, all maxima, catalyst item assets/potion identities, 19 packaged JSON resources, all three block/item/model/texture/loot references, Java 25 class versions, entrypoints and common/client separation.
-- Audit command: `python scripts/verify_artifact.py --minecraft-common /opt/hermes-tools/caches/gradle/caches/fabric-loom/26.3/minecraft-common.jar --minecraft-client /opt/hermes-tools/caches/gradle/caches/fabric-loom/26.3/minecraft-client.jar`
-- Mod JAR: `build/libs/enchantingoverhaul-0.1.0.jar` (use this, not the sources JAR). Test report: `build/reports/tests/test/index.html`.
-- **No Minecraft, server, GameTest or graphical gameplay test was launched.** Unit tests do not initialize Minecraft. The game-facing transaction, real vanilla compatibility, bootstrap, screen usability, persistence/drops and multiplayer still require player verification.
-- No commits/synchronization; workspace is not currently a Git repository.
+## Verification actually executed
+- `./gradlew clean build --no-daemon --console=plain --warning-mode all` — **BUILD SUCCESSFUL**, no warnings in the clean run.
+- **2,003 JUnit cases passed**, 0 failures/errors/skips: existing rules/catalog/library/XP plus creative XP, bottle conservation/capacity, extraction/purification/transformation plans, every synthesis recipe/resource threshold, exact potion/equipment requirements, max levels and cross-system progression plans.
+- All **85 recipes** independently checked against the README table, including ingredient quantities. Artifact audit verifies actual 26.3 vanilla data: exactly 41 non-curse enchants + 2 curses, all maxima, all ingredient item/potion IDs, extraction fees, 21 packaged JSON files, block/item/model/texture/loot references, class versions/entrypoints and common/client separation.
+- Audit: `python scripts/verify_artifact.py --minecraft-common /opt/hermes-tools/caches/gradle/caches/fabric-loom/26.3/minecraft-common.jar --minecraft-client /opt/hermes-tools/caches/gradle/caches/fabric-loom/26.3/minecraft-client.jar`
+- Mod: **`build/libs/enchantingoverhaul-0.2.0.jar`** (not the sources JAR). Tests: `build/reports/tests/test/index.html`.
+- **No Minecraft/client/server/GameTest or graphical gameplay test launched.** Tests exercise pure planners, not live Minecraft transactions/components. New runtime interactions, persistence, rendering, concurrent viewers and the reported fixes await player testing.
+- No commits/synchronization; workspace currently has no Git metadata.
 
-## Player test checklist (after final handoff)
-Use a disposable creative test world with Minecraft 26.3, Fabric Loader 0.19.5 and Fabric API 0.164.0+26.3; the mod belongs in both client and server installations for multiplayer.
-1. Obtain via Functional Blocks tab or `/give @s enchantingoverhaul:enchantment_replicator`. Use `/give @s minecraft:enchanted_book[minecraft:stored_enchantments={"minecraft:sharpness":3}]` and place that book in a nearby chiseled bookshelf. Expect I–III only, including shelves through a wall/above/below; coordinate offsets of ±5 qualify, ±6 do not.
-2. Set a known XP balance (`/experience set @s 0 levels`, `/experience set @s 0 points`, `/experience add @s 1000 points`). Insert one sword, deposit lapis and flint in workstation slots. Sharpness I costs 20 XP + 2 lapis + 1 flint. Upgrade I→III costs 90 XP + 7 lapis, no catalyst; total 110 XP + 9 lapis + 1 flint. Sword stays in slot.
-3. Add an Unbreaking blueprint; apply it to the same sword using obsidian. Sharpness and item name/damage/custom data should remain. Insert a pickaxe and compare choices; Smite on a Sharpness sword should be unavailable.
-4. Keep materials only in player inventory, or supply too little lapis/XP/wrong potion variant: no application/payment. On a fresh Smite target use exactly a base Splash Potion of Healing; new Mending costs 240 XP + 18 lapis + 1 Ghast Tear. No creative payment bypass is implemented.
-5. Remove/replace the only blueprint while the menu is open; choices should refresh by the next server update, and stale confirmation must not enchant or charge. Check highest-level duplicates, cursed/multi-enchantment books being ignored, and two Replicators sharing shelves.
-6. Close/reopen and save/reload with items left in slots. Break a stocked Replicator in survival and check item counts. Test two players sharing it, repeated confirmations and book→enchanted-book conversion for losses/duplication.
-Report crashes with `latest.log`, UI screenshots, and exact before/after item/material/XP values.
+## Next player checks (after review/handoff)
+Install only the new 0.2.0 JAR plus required Fabric API on 26.3; remove old mod versions. Use a disposable world. Workstations remain creative-tab/`/give` obtainable; survival recipes are not decided.
+1. Replicator: focus search and type `efficiency`/E plus hotbar keys without closing/moving items; click away then E closes; Escape closes while focused. With zero XP in creative, valid operations succeed at zero XP but still require deposited materials/knowledge. Retest survival fees unchanged.
+2. Potion catalyst: fresh Smite on a target consumes the exact base Splash Potion of Healing, returns one empty bottle in its slot; I→III upgrade uses no new catalyst/extra bottle.
+3. Extractor: sword with Sharpness V + Unbreaking III; in survival, **679 raw XP succeeds/reaches zero**, 678 fails unchanged. Extract only Sharpness; keep sword name/damage/custom data + Unbreaking; exactly one Sharpness V book. Occupied output blocks; repeated click cannot duplicate. Split a multi-enchantment book until one remains; that last book is already usable.
+4. Curses: cursed gear and books cannot extract/use as clean knowledge. Purify for one breath +315 XP; one bottle returned and all curses removed while beneficial enchants persist. Test stacked breath + full bottle output rejects safely, except final breath may reuse its emptied input. No-curse input cannot waste resources.
+5. Combiner: two Sharpness I books + **2 flint +1 iron ingot** in workstation storage → Sharpness II. Player-inventory-only ingredients fail. Check surplus retained, mismatched/cursed/multi-enchant/max-level books rejected, full output blocks and bottles return for potion recipes.
+6. Higher recipe: two Sharpness IV + **1 netherite scrap +1 Strength II potion** → V; alternatively two Smite III + **1 base Splash Healing +1 glistering melon slice** → IV. Shelf the result and verify higher replication levels. Replicated/extracted books are valid inputs.
+7. Save/reload all stocked workstations, survival-break/drop counts, shift-click inputs/outputs and two-player simultaneous/repeated confirmations. Report logs/screenshots plus exact before/after XP, input, output and ingredient counts.
 
-## Limitations / decisions / next work
-- Extractor/purification, Combiner synthesis/85 recipes, all vanilla progression restrictions, librarian/loot changes and special initial Mending crafting are **not implemented**. Extractor/Combiner right-click explicitly reports this checkpoint limitation. Vanilla enchanting/anvils/trades/loot remain unchanged; do not use this build as a completed survival replacement.
-- No survival workstation crafting recipes: ingredient quantities/patterns are explicitly undecided. Mending is testable only with a supplied blueprint at this checkpoint; initial acquisition controls come later.
-- Final screens/artwork remain provisional. Cube boundary interpretation and clean single-enchantment-only blueprints are explicit checkpoint choices; no permanent unlock/ownership system was invented.
-- Potion catalysts are currently consumed as whole specified items, **without a glass-bottle return**. This is provisional, not a finalized bottle-return design decision; obtain player direction before treating it as final.
-- Scanning each open menu is bounded but not load-tested at large multiplayer scale. No runtime claims follow from compilation/unit tests alone.
-- After the player feedback gate: fix library/Replicator runtime issues first, then implement selective extraction + purification + full synthesis as the next coherent loop. Later integrate vanilla acquisition/bypass controls and audit Grindstone XP loops before release. Do not silently choose undecided crafting/Mending/container rules or alter the gameplay README.
+## Remaining scope / next work
+- Vanilla enchanting/anvil restrictions, librarian/loot/fishing Mending changes, special initial Mending crafting and Grindstone exploit audit remain stage 6+ work. Vanilla pathways are still unchanged: this checkpoint is for workstation progression, not full survival bypass testing.
+- Workstation crafting quantities/patterns and exact initial Mending craft station/amounts remain undecided; do not invent them or edit the authoritative design without approval.
+- Final UI/artwork, large-scale multiplayer performance and runtime validation remain open. Resolve player feedback on this progression loop before building later integration on top.

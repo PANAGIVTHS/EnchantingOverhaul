@@ -2,5 +2,7 @@
   "block.enchantingoverhaul.enchantment_replicator": "Enchantment Replicator",
   "block.enchantingoverhaul.enchantment_extractor": "Enchantment Extractor",
   "block.enchantingoverhaul.enchanted_book_combiner": "Enchanted Book Combiner",
+  "enchantingoverhaul.potion.strong": "(strong)",
+  "enchantingoverhaul.potion.extended": "(extended)",
   "message.enchantingoverhaul.not_implemented": "Not implemented in this checkpoint"
 }
