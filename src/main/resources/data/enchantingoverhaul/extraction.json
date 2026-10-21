@@ -1,5 +1,6 @@
 {
   "schemaVersion": 1,
   "extractionXp": [55, 160, 280, 441, 679],
-  "purificationXp": 315
+  "purificationXp": 315,
+  "mendingExtractionXp": 910
 }

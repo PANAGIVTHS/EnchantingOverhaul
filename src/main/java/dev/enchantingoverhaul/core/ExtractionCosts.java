@@ -10,19 +10,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 /** Bundled tuning, deliberately not a runtime-reloadable datapack. */
-public record ExtractionCosts(List<Integer> extractionXp, int purificationXp) {
+public record ExtractionCosts(List<Integer> extractionXp, int purificationXp, int mendingExtractionXp) {
     public static final String RESOURCE = "/data/enchantingoverhaul/extraction.json";
     public ExtractionCosts {
         extractionXp = List.copyOf(extractionXp);
         if (extractionXp.size() != 5 || purificationXp < 1 || purificationXp > 32767
+                || mendingExtractionXp < 1 || mendingExtractionXp > 32767
                 || extractionXp.stream().anyMatch(x -> x < 1 || x > 32767))
-            throw new IllegalArgumentException("Expected five positive menu-safe XP fees");
+            throw new IllegalArgumentException("Expected positive menu-safe XP fees and five ordinary levels");
         for (int i = 1; i < extractionXp.size(); i++)
             if (extractionXp.get(i) < extractionXp.get(i - 1)) throw new IllegalArgumentException("Decreasing XP schedule");
+        if (mendingExtractionXp <= purificationXp || extractionXp.stream().anyMatch(x -> x >= mendingExtractionXp))
+            throw new IllegalArgumentException("Mending extraction must cost more than every ordinary extraction and curse removal");
     }
     public int extraction(int level) {
         if (level < 1 || level > extractionXp.size()) throw new IllegalArgumentException("Unsupported extraction level");
         return extractionXp.get(level - 1);
+    }
+    /** Beneficial fee by exact registered key; natural-maximum validation remains in ExtractionRules. */
+    public int extraction(String enchantmentId, int level) {
+        int ordinary = extraction(level);
+        return "minecraft:mending".equals(enchantmentId) ? mendingExtractionXp : ordinary;
     }
     public static ExtractionCosts loadDefault() {
         var input = ExtractionCosts.class.getResourceAsStream(RESOURCE);
@@ -37,7 +45,7 @@ public record ExtractionCosts(List<Integer> extractionXp, int purificationXp) {
             if (integer(root.get("schemaVersion")) != 1) throw new IllegalArgumentException("Unknown schema");
             List<Integer> fees = new ArrayList<>();
             for (var fee : root.getAsJsonArray("extractionXp")) fees.add(integer(fee));
-            return new ExtractionCosts(fees, integer(root.get("purificationXp")));
+            return new ExtractionCosts(fees, integer(root.get("purificationXp")), integer(root.get("mendingExtractionXp")));
         } catch (RuntimeException e) { throw new IllegalArgumentException("Invalid extraction tuning", e); }
     }
     private static int integer(JsonElement value) {

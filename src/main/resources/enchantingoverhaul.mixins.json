@@ -1,0 +1,24 @@
+{
+  "required": true,
+  "minVersion": "0.8.7",
+  "package": "dev.enchantingoverhaul.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "mixins": [
+    "EnchantmentMenuMixin",
+    "AnvilMenuMixin",
+    "GrindstoneExperienceMixin",
+    "EnchantRandomlyAcquisitionMixin",
+    "EnchantmentHelperAcquisitionMixin",
+    "FilteredBookTradeAcquisitionMixin",
+    "SetEnchantmentsAcquisitionMixin",
+    "SingleEnchantmentAcquisitionMixin",
+    "VillagerTradeAcquisitionMixin",
+    "MerchantMenuOffersMixin",
+    "MerchantContainerOffersMixin",
+    "MerchantResultSlotOffersMixin",
+    "ServerPlayerMerchantOffersMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

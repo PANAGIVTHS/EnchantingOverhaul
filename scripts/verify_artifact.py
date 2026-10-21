@@ -12,7 +12,7 @@ def load(archive, path):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--mod', type=Path, default=Path('build/libs/enchantingoverhaul-0.2.1.jar'))
+    parser.add_argument('--mod', type=Path, default=Path('build/libs/enchantingoverhaul-0.3.1.jar'))
     parser.add_argument('--minecraft-common', type=Path, required=True)
     parser.add_argument('--minecraft-client', type=Path, required=True)
     args = parser.parse_args()
@@ -26,8 +26,24 @@ def main():
                 load(mod, path)
                 json_count += 1
         metadata = load(mod, 'fabric.mod.json')
-        assert metadata['version'] == '0.2.1'
+        assert metadata['version'] == '0.3.1'
         assert metadata['depends']['minecraft'] == '26.3'
+        assert metadata['mixins'] == ['enchantingoverhaul.mixins.json']
+        mixin_config = load(mod, metadata['mixins'][0])
+        assert mixin_config['required'] is True
+        assert mixin_config['compatibilityLevel'] == 'JAVA_25'
+        assert mixin_config['injectors']['defaultRequire'] == 1
+        expected_mixins = {'EnchantmentMenuMixin', 'AnvilMenuMixin', 'GrindstoneExperienceMixin',
+            'EnchantRandomlyAcquisitionMixin', 'EnchantmentHelperAcquisitionMixin',
+            'FilteredBookTradeAcquisitionMixin', 'SetEnchantmentsAcquisitionMixin',
+            'SingleEnchantmentAcquisitionMixin', 'VillagerTradeAcquisitionMixin',
+            'MerchantMenuOffersMixin', 'MerchantContainerOffersMixin',
+            'MerchantResultSlotOffersMixin', 'ServerPlayerMerchantOffersMixin'}
+        assert len(mixin_config['mixins']) == len(expected_mixins)
+        assert set(mixin_config['mixins']) == expected_mixins
+        for name in mixin_config['mixins']:
+            assert mixin_config['package'].replace('.', '/') + '/' + name + '.class' in mod_names
+        assert 'mixins' not in metadata['entrypoints']
         assert '${version}' not in mod.read('fabric.mod.json').decode()
         for kind, entries in metadata['entrypoints'].items():
             for entry in entries:
@@ -75,6 +91,8 @@ def main():
         costs = load(mod, 'data/enchantingoverhaul/extraction.json')
         assert costs['extractionXp'] == [55, 160, 280, 441, 679]
         assert costs['purificationXp'] == 315
+        assert costs['mendingExtractionXp'] == 910
+        assert costs['mendingExtractionXp'] > max(costs['extractionXp'] + [costs['purificationXp']])
         blocks = ('enchantment_replicator', 'enchantment_extractor', 'enchanted_book_combiner')
         translations = load(mod, 'assets/enchantingoverhaul/lang/en_us.json')
         boosted = {ingredient['potionId'] for recipe in synthesis for ingredient in recipe['ingredients']
@@ -88,6 +106,27 @@ def main():
             assert b'catalystName' in mod.read(f'dev/enchantingoverhaul/client/{screen}.class'), screen
         assert b'getAmplifier' in mod.read('dev/enchantingoverhaul/game/Enchantments.class')
         assert 'dev/enchantingoverhaul/core/PotionRequirementLabel.class' in mod_names
+        recovery = mod.read('dev/enchantingoverhaul/block/WorkstationBlockEntity.class')
+        assert b'net/minecraft/world/entity/item/ItemEntity' not in recovery, 'Recovery must retain overflow, not spawn pickup entities'
+        assert b'escrowCount' in recovery
+        for screen in ('ReferenceWorkstationScreen', 'CombinerScreen'):
+            bytecode = mod.read(f'dev/enchantingoverhaul/client/{screen}.class')
+            assert b'WorkstationTooltip' in bytecode
+            assert b'net/minecraft/client/gui/components/Tooltip' not in bytecode, 'Long previews must not use above-widget positioning'
+        assert 'dev/enchantingoverhaul/core/TooltipBounds.class' in mod_names
+        for screen in ('ReferenceWorkstationScreen', 'ReferenceButton', 'CombinerScreen'):
+            bytecode = mod.read(f'dev/enchantingoverhaul/client/{screen}.class')
+            assert b'isHoveredOrFocused' not in bytecode, 'Mouse focus must not pin previews'
+        for screen in ('ReferenceButton', 'CombinerScreen'):
+            bytecode = mod.read(f'dev/enchantingoverhaul/client/{screen}.class')
+            assert b'WidgetPreviewPolicy' in bytecode and b'isKeyboard' in bytecode
+        assert b'TickSnapshot' in recovery and b'freshLibrary' in recovery and b'libraryForPreview' in recovery
+        assert b'getTickCount' in recovery and b'getGameTime' not in recovery, 'Preview expiry must work during tick freeze'
+        for name in ('MerchantMenuOffersMixin', 'MerchantContainerOffersMixin', 'MerchantResultSlotOffersMixin'):
+            assert b'MerchantOfferRestrictions' in mod.read('dev/enchantingoverhaul/mixin/' + name + '.class')
+        assert b'MerchantOfferPresentation' in mod.read('dev/enchantingoverhaul/mixin/ServerPlayerMerchantOffersMixin.class')
+        replicator = mod.read('dev/enchantingoverhaul/menu/ReplicatorMenu.class')
+        assert b'freshLibrary' in replicator and b'libraryForPreview' in replicator
         for block in blocks:
             prefix = 'assets/enchantingoverhaul/'
             assert 'block.enchantingoverhaul.' + block in translations
@@ -117,13 +156,42 @@ def main():
             if path.startswith('dev/enchantingoverhaul/') and '/client/' not in path:
                 main_classes += 1
                 assert b'net/minecraft/client/' not in data, ('client linkage in common class', path)
-        assert not any('/recipe/' in n for n in mod_names), 'Unapproved crafting recipes in checkpoint'
+        from collections import Counter
+        approved = {
+            'enchantment_extractor': {'minecraft:grindstone': 1, 'minecraft:copper_ingot': 4, 'minecraft:amethyst_shard': 2},
+            'enchantment_replicator': {'minecraft:enchanting_table': 1, 'minecraft:amethyst_shard': 4},
+            'enchanted_book_combiner': {'minecraft:anvil': 1, 'minecraft:bookshelf': 1, 'minecraft:amethyst_shard': 4},
+            'mending': {'minecraft:nether_star': 1, 'minecraft:ghast_tear': 1, 'minecraft:golden_apple': 1, 'minecraft:book': 1},
+        }
+        recipe_paths = {n for n in mod_names if '/recipe/' in n and n.endswith('.json')}
+        assert recipe_paths == {f'data/enchantingoverhaul/recipe/{name}.json' for name in approved}
+        for name, expected in approved.items():
+            recipe = load(mod, f'data/enchantingoverhaul/recipe/{name}.json')
+            if name == 'mending':
+                assert recipe['type'] == 'minecraft:crafting_shapeless'
+                actual = Counter(recipe['ingredients'])
+                assert recipe['result'] == {'id': 'minecraft:enchanted_book', 'count': 1,
+                    'components': {'minecraft:stored_enchantments': {'minecraft:mending': 1}}}
+            else:
+                assert recipe['type'] == 'minecraft:crafting_shaped'
+                assert len(recipe['pattern']) == 3 and all(len(row) == 3 for row in recipe['pattern'])
+                actual = Counter(recipe['key'][symbol] for row in recipe['pattern'] for symbol in row if symbol != ' ')
+                assert recipe['result'] == {'id': 'enchantingoverhaul:' + name, 'count': 1}
+            assert actual == expected, (name, actual)
+            for item in actual:
+                namespace, path = item.split(':')
+                assert f'assets/{namespace}/items/{path}.json' in client_names, item
+            unlock = load(mod, f'data/enchantingoverhaul/advancement/recipes/{name}.json')
+            assert unlock['rewards'] == {'recipes': ['enchantingoverhaul:' + name]}
+        print('PASS: all 4 approved survival recipes, exact quantities, stored Mending result and recipe-book unlocks checked.')
+        print('PASS: all 13 required common mixins registered and packaged; default required injection count 1.')
         print(f'PASS: {json_count} packaged JSON resources parsed; entrypoints and Java 25 class versions checked.')
         print('PASS: exact 41 non-curse catalysts/maxima cover the actual 43-enchantment Minecraft 26.3 data set.')
-        print('PASS: all catalyst item assets and exact potion translation identities exist in vanilla.')
+        print('PASS: all catalyst assets/potion identities exist; both previews link variant-aware potency labels with vanilla II translation.')
         print('PASS: all 85 synthesis upgrades cover exactly the vanilla maxima, with real vanilla ingredients/potion variants; extraction/purification fees match.')
+        print('PASS: recovery retains overflow; long previews bounded; mouse focus cannot pin popups; shared previews retain fresh action scans.')
         print('PASS: all 3 workstation blockstates, model/texture references, item definitions, translations and self-drop loot tables checked.')
-        print(f'PASS: {main_classes} common mod classes have no direct client-class linkage; no test classes/unapproved recipes packaged.')
+        print(f'PASS: {main_classes} common mod classes have no direct client-class linkage; no test classes packaged.')
         print('NOT TESTED: game bootstrap, runtime registries/rendering, inventory persistence, interaction, networking or multiplayer.')
 
 

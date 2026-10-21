@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "A A",
+    " T ",
+    "A A"
+  ],
+  "key": {
+    "A": "minecraft:amethyst_shard",
+    "T": "minecraft:enchanting_table"
+  },
+  "result": {
+    "id": "enchantingoverhaul:enchantment_replicator",
+    "count": 1
+  }
+}

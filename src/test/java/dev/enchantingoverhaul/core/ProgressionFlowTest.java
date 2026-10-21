@@ -56,6 +56,36 @@ class ProgressionFlowTest {
         assertTrue(salvaged.accepted()); assertEquals(0,balance-salvaged.rawXp());
         assertEquals(5,LibraryKnowledge.aggregate(catalog,List.of(LibraryKnowledge.Blueprint.clean(salvaged.output().key().id(),salvaged.output().level()))).highestLevel("minecraft:sharpness"));
     }
+    @Test void twoCursesRequireTwoBreathsTwoFeesAndOutputPickupBeforeBookSalvage() {
+        var extraction = new ExtractionRules(ExtractionCosts.loadDefault());
+        var good = new ExtractionRules.Entry(new ExtractionRules.Key(ExtractionRules.Component.APPLIED, "minecraft:sharpness"), 5, 5, false);
+        var binding = new ExtractionRules.Entry(new ExtractionRules.Key(ExtractionRules.Component.STORED, "minecraft:binding_curse"), 1, 1, true);
+        var vanishing = new ExtractionRules.Entry(new ExtractionRules.Key(ExtractionRules.Component.APPLIED, "minecraft:vanishing_curse"), 1, 1, true);
+        var source = new ExtractionRules.Source(1, false, true, List.of(good, binding, vanishing));
+        long xp = 1309;
+        int breaths = 0;
+        for (var curse : List.of(binding, vanishing)) {
+            var plan = extraction.extract(source, curse.key(), BREATH, ExperiencePayment.canAfford(false, xp, 315));
+            assertTrue(plan.accepted());
+            assertEquals(ExtractionRules.ReagentOutput.GLASS_BOTTLE, plan.reagentOutput());
+            xp -= plan.rawXp(); breaths++;
+            source = new ExtractionRules.Source(1, false, true, plan.remaining());
+            // Leaving the glass bottle in slot 1 cannot authorize the next extraction.
+            var occupied = new ExtractionRules.Reagent(ExtractionRules.ReagentType.OTHER, 1);
+            var next = source.enchantments().stream().filter(ExtractionRules.Entry::curse).findFirst().orElse(good);
+            assertEquals(ExtractionRules.Failure.OUTPUT_OCCUPIED, extraction.extract(source, next.key(), occupied, true).failure());
+            if (source.enchantments().stream().anyMatch(ExtractionRules.Entry::curse)) {
+                assertEquals(ExtractionRules.Failure.CURSED_SOURCE, extraction.extract(source, good.key(), BOOK, true).failure());
+                assertEquals(0, LibraryKnowledge.aggregate(ReplicationCatalog.loadDefault(),
+                        List.of(new LibraryKnowledge.Blueprint(true, true, Map.of("minecraft:sharpness", 5)))).highestLevel("minecraft:sharpness"));
+            }
+        }
+        assertEquals(2, breaths); assertEquals(679, xp);
+        var salvaged = extraction.extract(source, good.key(), BOOK, ExperiencePayment.canAfford(false, xp, 679));
+        assertTrue(salvaged.accepted()); assertEquals(0, xp - salvaged.rawXp());
+        assertEquals(ExtractionRules.ReagentOutput.ENCHANTED_BOOK, salvaged.reagentOutput());
+        assertTrue(salvaged.remaining().isEmpty());
+    }
     @Test void everySynthesisPaymentAlsoFitsBottleAccountingAndPreservesSurplus() {
         for(var recipe:SynthesisCatalog.loadDefault().recipes()) {
             List<SynthesisRules.Material> materials=new ArrayList<>(Collections.nCopies(20,SynthesisRules.EMPTY_MATERIAL));

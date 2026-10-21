@@ -17,6 +17,6 @@ public final class EnchantingOverhaul implements ModInitializer {
 
     @Override public void onInitialize() {
         ModContent.register();
-        LOGGER.info("Enchanting Overhaul library/Replicator checkpoint: {} catalyst definitions", DEFINITIONS.size());
+        LOGGER.info("Enchanting Overhaul progression integration: {} catalyst definitions", DEFINITIONS.size());
     }
 }

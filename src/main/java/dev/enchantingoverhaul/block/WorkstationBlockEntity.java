@@ -4,13 +4,16 @@ import dev.enchantingoverhaul.ModContent;
 import dev.enchantingoverhaul.menu.ReplicatorMenu;
 import dev.enchantingoverhaul.menu.ExtractorMenu;
 import dev.enchantingoverhaul.core.ExtractorMigration;
+import dev.enchantingoverhaul.core.LibraryKnowledge;
+import dev.enchantingoverhaul.core.TickSnapshot;
+import dev.enchantingoverhaul.game.LibraryScanner;
 import dev.enchantingoverhaul.game.ExtractionService;
 import dev.enchantingoverhaul.menu.CombinerMenu;
 import java.util.ArrayList;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.MenuProvider;
@@ -37,6 +40,18 @@ public final class WorkstationBlockEntity extends BlockEntity implements Contain
 
     private final WorkstationBlock.Kind kind;
     private final NonNullList<ItemStack> items;
+    // Only screen previews share this transient cache; confirmations always force a physical scan.
+    private final TickSnapshot<LibraryKnowledge> libraryPreview = new TickSnapshot<>();
+
+    public LibraryKnowledge libraryForPreview() {
+        if (!(level instanceof ServerLevel serverLevel)) throw new IllegalStateException("Server library preview only");
+        return libraryPreview.preview(serverLevel.getServer().getTickCount(), () -> LibraryScanner.scan(serverLevel, worldPosition));
+    }
+
+    public LibraryKnowledge freshLibrary() {
+        if (!(level instanceof ServerLevel serverLevel)) throw new IllegalStateException("Server library scan only");
+        return libraryPreview.refresh(serverLevel.getServer().getTickCount(), () -> LibraryScanner.scan(serverLevel, worldPosition));
+    }
 
     public WorkstationBlockEntity(BlockPos pos, BlockState state) {
         super(ModContent.WORKSTATION_ENTITY, pos, state);
@@ -56,6 +71,7 @@ public final class WorkstationBlockEntity extends BlockEntity implements Contain
     @Override
     protected void loadAdditional(ValueInput input) {
         super.loadAdditional(input);
+        libraryPreview.clear();
         items.clear();
         ContainerHelper.loadAllItems(input, items);
     }
@@ -111,7 +127,8 @@ public final class WorkstationBlockEntity extends BlockEntity implements Contain
     public boolean canPlaceItem(int slot, ItemStack stack) {
         if (kind != WorkstationBlock.Kind.EXTRACTOR) return Container.super.canPlaceItem(slot, stack);
         // Automation cannot fill legacy escrow or introduce a stacked two-slot reagent.
-        return stack.getCount() == 1 && (slot == 0 && ExtractionService.acceptsTarget(stack)
+        return slot >= 0 && slot < 2 && items.get(slot).isEmpty() && stack.getCount() == 1
+                && (slot == 0 && ExtractionService.acceptsTarget(stack)
                 || slot == 1 && ExtractionService.acceptsReagent(stack));
     }
 
@@ -140,13 +157,13 @@ public final class WorkstationBlockEntity extends BlockEntity implements Contain
     private void recoverExtractorLegacy(Player player, Inventory playerInventory) {
         if (player.level().isClientSide() || player.isSpectator()) return;
         var plan = ExtractorMigration.plan(items.stream().map(ItemStack::getCount).toList());
-        long inserted = 0, dropped = 0, escrow = 0;
+        long inserted = 0, escrow = 0;
         for (int sourceSlot = 0; sourceSlot < plan.size(); sourceSlot++) {
             var migration = plan.get(sourceSlot);
             if (migration.recover() == 0) continue;
             ItemStack original = items.get(sourceSlot);
             ItemStack recovery = original.copyWithCount(migration.recover());
-            // Detach from persistent ownership before handing anything to another container/entity.
+            // Detach from persistent ownership before handing anything to the player inventory.
             items.set(sourceSlot, original.copyWithCount(migration.retained()));
             setChanged();
             var indices = new ArrayList<Integer>();
@@ -175,28 +192,20 @@ public final class WorkstationBlockEntity extends BlockEntity implements Contain
             }
             recovery.setCount(delivery.overflow());
             if (!recovery.isEmpty()) {
-                // Dropping is permitted ONLY for legacy recovery overflow, never an extraction output.
-                var entity = new ItemEntity(player.level(), player.getX(), player.getY(), player.getZ(), recovery.copy());
-                entity.setTarget(player.getUUID());
-                entity.setDefaultPickUpDelay();
-                if (player.level().addFreshEntity(entity)) {
-                    dropped += recovery.getCount();
-                    recovery = ItemStack.EMPTY;
-                }
-            }
-            if (!recovery.isEmpty()) {
-                // A failed entity spawn must not delete an item: retain it for the next opening/break.
-                items.set(sourceSlot, original.copyWithCount(migration.retained() + recovery.getCount()));
+                // Never spawn recovery overflow: vanilla ItemEntity pickup can discard it for creative
+                // players with a full inventory. Retain persistent ownership until space is available.
+                items.set(sourceSlot, original.copyWithCount(
+                        ExtractorMigration.escrowCount(migration.retained(), delivery)));
                 escrow += recovery.getCount();
             }
             setChanged();
         }
-        if (inserted + dropped + escrow > 0) {
+        if (inserted + escrow > 0) {
             playerInventory.setChanged();
             player.inventoryMenu.broadcastChanges();
             player.sendSystemMessage(Component.literal("Extractor legacy recovery: " + inserted
-                    + " item(s) returned to your inventory, " + dropped + " overflow item(s) dropped at your feet"
-                    + (escrow > 0 ? "; " + escrow + " item(s) remain safely stored; reopen to recover" : "") + "."));
+                    + " item(s) returned to your inventory"
+                    + (escrow > 0 ? "; " + escrow + " item(s) remain safely stored; make inventory space and reopen to recover" : "") + "."));
         }
     }
 

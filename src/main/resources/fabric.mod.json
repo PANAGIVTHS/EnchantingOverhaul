@@ -3,8 +3,9 @@
   "id": "enchantingoverhaul",
   "version": "${version}",
   "name": "Enchanting Overhaul",
-  "description": "Physical enchantment libraries and deterministic enchanting progression. Development checkpoint: library, replication, selective extraction, purification and book synthesis.",
+  "description": "Physical enchantment libraries and deterministic enchanting progression. Survival progression: libraries, replication, selective extraction, synthesis and vanilla acquisition controls.",
   "environment": "*",
+  "mixins": ["enchantingoverhaul.mixins.json"],
   "entrypoints": {
     "main": ["dev.enchantingoverhaul.EnchantingOverhaul"],
     "client": ["dev.enchantingoverhaul.client.EnchantingOverhaulClient"]

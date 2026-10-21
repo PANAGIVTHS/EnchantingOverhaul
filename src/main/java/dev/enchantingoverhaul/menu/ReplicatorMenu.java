@@ -7,7 +7,6 @@ import dev.enchantingoverhaul.core.LibraryKnowledge;
 import dev.enchantingoverhaul.core.ReplicationDefinition;
 import dev.enchantingoverhaul.core.ReplicationRules;
 import dev.enchantingoverhaul.game.Enchantments;
-import dev.enchantingoverhaul.game.LibraryScanner;
 import dev.enchantingoverhaul.game.PlayerExperience;
 import dev.enchantingoverhaul.game.ReplicationService;
 import java.util.List;
@@ -29,6 +28,7 @@ public final class ReplicatorMenu extends AbstractContainerMenu {
             CATALYST = BASE + 4, STATUS = BASE + 5, PLAYER_XP = BASE + 6;
     private final Container inventory;
     private final Player owner;
+    private ItemStack previousTarget = ItemStack.EMPTY;
     private final SimpleContainerData data = new SimpleContainerData(BASE + 7);
 
     public ReplicatorMenu(int syncId, Inventory playerInventory, Container inventory) {
@@ -75,11 +75,20 @@ public final class ReplicatorMenu extends AbstractContainerMenu {
     }
     private LibraryKnowledge freshKnowledge() {
         return inventory instanceof WorkstationBlockEntity workstation
-                ? LibraryScanner.scan(owner.level(), workstation.getBlockPos())
+                ? workstation.freshLibrary()
+                : LibraryKnowledge.aggregate(EnchantingOverhaul.CATALOG, List.of());
+    }
+    private LibraryKnowledge previewKnowledge() {
+        return inventory instanceof WorkstationBlockEntity workstation
+                ? workstation.libraryForPreview()
                 : LibraryKnowledge.aggregate(EnchantingOverhaul.CATALOG, List.of());
     }
     private void refresh(LibraryKnowledge knowledge) {
         ItemStack target = inventory.getItem(0);
+        if (!ItemStack.matches(previousTarget, target)) {
+            data.set(SELECTED, -1);
+            previousTarget = target.copy(); // Never charge a replaced target using another viewer's prior selection.
+        }
         for (int i = 0; i < DEFINITIONS.size(); i++) {
             var def = DEFINITIONS.get(i);
             var enchantment = Enchantments.find(owner.level(), def.enchantmentId()).orElse(null);
@@ -97,7 +106,7 @@ public final class ReplicatorMenu extends AbstractContainerMenu {
         data.set(STATUS, plan == null ? ReplicationRules.FailureReason.INVALID_REQUEST.ordinal() : plan.failure().ordinal());
     }
     @Override public void broadcastChanges() {
-        if (!owner.level().isClientSide() && stillValid(owner)) refresh(freshKnowledge());
+        if (!owner.level().isClientSide() && stillValid(owner)) refresh(previewKnowledge());
         super.broadcastChanges();
     }
     @Override public boolean clickMenuButton(Player player, int button) {
@@ -120,7 +129,7 @@ public final class ReplicatorMenu extends AbstractContainerMenu {
         return true;
     }
     @Override public ItemStack quickMoveStack(Player player, int index) {
-        if (index < 0 || index >= slots.size()) return ItemStack.EMPTY;
+        if (!stillValid(player) || index < 0 || index >= slots.size()) return ItemStack.EMPTY;
         Slot slot = slots.get(index);
         if (!slot.hasItem()) return ItemStack.EMPTY;
         ItemStack original = slot.getItem(), copy = original.copy();

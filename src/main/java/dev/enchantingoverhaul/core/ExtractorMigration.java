@@ -22,6 +22,11 @@ public final class ExtractorMigration {
         }
         return List.copyOf(result);
     }
+    /** Overflow stays owned by the source slot in every game mode; successful spawning is NOT delivery. */
+    public static int escrowCount(int retained, Delivery delivery) {
+        if (retained < 0 || delivery.overflow() < 0) throw new IllegalArgumentException("Negative escrow count");
+        return Math.addExact(retained, delivery.overflow());
+    }
     /** Caller supplies compatible slot capacity in merge-first order; never discards the remainder. */
     public static Delivery delivery(int count, List<Integer> capacities) {
         if (count < 0) throw new IllegalArgumentException("Negative recovery count");

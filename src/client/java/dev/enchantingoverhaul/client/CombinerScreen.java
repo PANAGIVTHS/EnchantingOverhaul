@@ -1,13 +1,13 @@
 package dev.enchantingoverhaul.client;
 
 import dev.enchantingoverhaul.core.Catalyst;
+import dev.enchantingoverhaul.core.WidgetPreviewPolicy;
 import dev.enchantingoverhaul.core.SynthesisIngredient;
 import dev.enchantingoverhaul.game.Enchantments;
 import dev.enchantingoverhaul.game.SynthesisService;
 import dev.enchantingoverhaul.menu.CombinerMenu;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
@@ -26,8 +26,10 @@ public final class CombinerScreen extends AbstractContainerScreen<CombinerMenu> 
     }
     @Override public void extractRenderState(GuiGraphicsExtractor graphics,int mouseX,int mouseY,float delta) {
         combine.active=menu.status()==SynthesisService.Status.READY;
-        combine.setTooltip(Tooltip.create(Component.literal(recipeDetails())));
         super.extractRenderState(graphics,mouseX,mouseY,delta);
+        if (WidgetPreviewPolicy.requested(combine.visible, combine.isHovered(), combine.isFocused(),
+                minecraft.getLastInputType().isKeyboard()))
+            WorkstationTooltip.show(graphics,font,recipeDetails(),mouseX,mouseY);
     }
     @Override public void extractBackground(GuiGraphicsExtractor graphics,int mouseX,int mouseY,float delta) {
         super.extractBackground(graphics,mouseX,mouseY,delta);

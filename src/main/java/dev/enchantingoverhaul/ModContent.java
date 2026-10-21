@@ -23,7 +23,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 
-/** Registry entry points for workstation content; no survival recipes are chosen here. */
+/** Registry entry points; survival crafting definitions are bundled recipe resources. */
 public final class ModContent {
     public static WorkstationBlock REPLICATOR;
     public static WorkstationBlock EXTRACTOR;

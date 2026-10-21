@@ -95,9 +95,9 @@ public final class ReplicatorScreen extends ReferenceWorkstationScreen<Replicato
     }
     @Override protected String slotHint(int index) {
         return switch (index) {
-            case 0 -> "Target: one eligible item or book. It remains here after replication.\n" + previewTooltip();
-            case 1 -> "Lapis slot: deposit " + menu.lapisCost() + " lapis lazuli for the selected operation. No materials are taken from your inventory.\n" + previewTooltip();
-            default -> "Catalyst slot. " + catalystPreview() + " Bottled catalysts return 1 glass bottle here.\n" + previewTooltip();
+            case 0 -> "Target: one eligible item or book. It remains here after replication. Hover Cost or Replicate for the full preview.";
+            case 1 -> "Lapis slot: deposit " + menu.lapisCost() + " lapis lazuli for the selected operation. No materials are taken from your inventory.";
+            default -> "Catalyst slot. " + catalystPreview() + " Bottled catalysts return 1 glass bottle here.";
         };
     }
     private String statusText() {

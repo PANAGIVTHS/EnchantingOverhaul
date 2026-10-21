@@ -1,5 +1,7 @@
 package dev.enchantingoverhaul.client;
 
+import dev.enchantingoverhaul.core.WidgetPreviewPolicy;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
@@ -24,9 +26,13 @@ final class ReferenceButton extends Button {
         setMessage(Component.literal(name + suffix));
     }
     void selected(boolean selected) { this.selected = selected; }
+    boolean previewRequested() {
+        return WidgetPreviewPolicy.requested(visible, isHovered(), isFocused(),
+                Minecraft.getInstance().getLastInputType().isKeyboard());
+    }
     @Override protected void extractContents(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float delta) {
         int x = getX(), y = getY(), w = getWidth(), h = getHeight();
-        bevel(graphics, x, y, w, h, active && isHoveredOrFocused() ? 0xff818181 : 0xff707070,
+        bevel(graphics, x, y, w, h, active && previewRequested() ? 0xff818181 : 0xff707070,
                 0xffaaaaaa, 0xff393939);
         if (selected) {
             graphics.fill(x, y, x + w, y + 1, PINK);

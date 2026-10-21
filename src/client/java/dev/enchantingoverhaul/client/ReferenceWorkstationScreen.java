@@ -7,12 +7,10 @@ import java.util.List;
 import java.util.Locale;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
@@ -91,10 +89,8 @@ abstract class ReferenceWorkstationScreen<M extends AbstractContainerMenu> exten
             rows[r].active = present;
             rows[r].selected(present && filtered.get(position) == selectedIndex());
             rows[r].label(present ? entryName(filtered.get(position)) : "", present ? entrySuffix(filtered.get(position)) : "");
-            rows[r].setTooltip(present ? Tooltip.create(Component.literal(entryTooltip(filtered.get(position)))) : null);
         }
         action.active = actionReady();
-        action.setTooltip(Tooltip.create(Component.literal(previewTooltip())));
         refreshExtraWidgets();
     }
     @Override public boolean keyPressed(KeyEvent event) {
@@ -158,7 +154,17 @@ abstract class ReferenceWorkstationScreen<M extends AbstractContainerMenu> exten
     @Override public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float delta) {
         refreshWidgets();
         super.extractRenderState(graphics, mouseX, mouseY, delta);
-        if (inside(mouseX, mouseY, 12, 68, 116, 16)) tooltip(graphics, previewTooltip(), mouseX, mouseY);
+        if (inside(mouseX, mouseY, 12, 68, 116, 16) || action.previewRequested()) {
+            tooltip(graphics, previewTooltip(), mouseX, mouseY);
+        } else {
+            for (int r = 0; r < rows.length; r++) {
+                int position = scroll.first() + r;
+                if (position < filtered.size() && rows[r].previewRequested()) {
+                    tooltip(graphics, entryTooltip(filtered.get(position)), mouseX, mouseY);
+                    break;
+                }
+            }
+        }
     }
     @Override public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float delta) {
         super.extractBackground(graphics, mouseX, mouseY, delta);
@@ -189,16 +195,14 @@ abstract class ReferenceWorkstationScreen<M extends AbstractContainerMenu> exten
     @Override protected void extractTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
         if (hoveredSlot != null && hoveredSlot.index < inputSlotCount() && menu.getCarried().isEmpty()) {
             ItemStack stack = hoveredSlot.getItem();
-            var lines = new ArrayList<FormattedCharSequence>();
-            if (!stack.isEmpty()) {
-                for (var line : getTooltipFromContainerItem(stack)) lines.addAll(font.split(line, Math.min(250, width - 24)));
-            }
-            lines.addAll(font.split(Component.literal(slotHint(hoveredSlot.index)), Math.min(250, width - 24)));
-            graphics.setTooltipForNextFrame(font, lines, mouseX, mouseY);
+            var lines = new ArrayList<Component>();
+            if (!stack.isEmpty()) lines.addAll(getTooltipFromContainerItem(stack));
+            lines.add(Component.literal(slotHint(hoveredSlot.index)));
+            WorkstationTooltip.show(graphics, font, lines, mouseX, mouseY);
         } else super.extractTooltip(graphics, mouseX, mouseY);
     }
     private void tooltip(GuiGraphicsExtractor graphics, String text, int mouseX, int mouseY) {
-        graphics.setTooltipForNextFrame(font, font.split(Component.literal(text), Math.min(250, width - 24)), mouseX, mouseY);
+        WorkstationTooltip.show(graphics, font, text, mouseX, mouseY);
     }
     protected static String levelLabel(int level) {
         return switch (level) { case 1 -> "I"; case 2 -> "II"; case 3 -> "III"; case 4 -> "IV"; case 5 -> "V"; default -> Integer.toString(level); };

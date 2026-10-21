@@ -42,7 +42,7 @@ public final class ExtractionRules {
         Entry entry = source == null ? null : source.enchantments().stream()
                 .filter(e -> e.key().equals(selected)).findFirst().orElse(null);
         int fee = entry == null ? 0 : entry.curse() ? costs.purificationXp()
-                : entry.level() >= 1 && entry.level() <= 5 ? costs.extraction(entry.level()) : 0;
+                : entry.level() >= 1 && entry.level() <= 5 ? costs.extraction(entry.key().id(), entry.level()) : 0;
         Failure invalid = invalid(source);
         if (invalid != Failure.NONE) return reject(invalid, fee);
         if (entry == null) return reject(Failure.SELECT_ENCHANTMENT, fee);

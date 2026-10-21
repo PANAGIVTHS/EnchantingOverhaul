@@ -56,8 +56,8 @@ public final class ExtractorScreen extends ReferenceWorkstationScreen<ExtractorM
                 + "\n" + statusText() + "\nThe source stays in its slot; all other enchantments and item properties are retained.";
     }
     @Override protected String slotHint(int index) {
-        return (index == 0 ? "Source: one enchanted item or multi-enchantment book.\n" : "Reagent/result: insert exactly 1 blank book or 1 Dragon's Breath. Take the resulting enchanted book/glass bottle before repeating.\n")
-                + previewTooltip();
+        return index == 0 ? "Source: one enchanted item or multi-enchantment book. Other properties are retained. Hover Cost or Extract for the full preview."
+                : "Reagent/result: insert exactly 1 blank book or 1 Dragon's Breath. Take the resulting enchanted book/glass bottle before repeating. Hover Cost or Extract for the full preview.";
     }
     private String statusText() {
         return switch (menu.extractionStatus()) {

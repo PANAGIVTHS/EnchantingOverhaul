@@ -56,7 +56,7 @@ class ExtractionRulesTest {
         var original = source(book, selected, other);
         var result = RULES.extract(original, selected.key(), BOOK, true);
         assertTrue(result.accepted());
-        assertEquals(COSTS.extraction(level), result.rawXp());
+        assertEquals(id.equals("minecraft:mending") ? 910 : COSTS.extraction(level), result.rawXp());
         assertEquals(selected, result.output());
         assertEquals(ExtractionRules.ReagentOutput.ENCHANTED_BOOK, result.reagentOutput());
         assertEquals(List.of(other), result.remaining());
@@ -73,6 +73,60 @@ class ExtractionRulesTest {
         assertEquals(List.of(selected), source.enchantments());
         var after = ExperienceMath.state(679 - COSTS.extraction(5));
         assertEquals(0, after.level()); assertEquals(0f, after.progress());
+    }
+    @ParameterizedTest @MethodSource("curses")
+    void mendingPreviewAndAffordabilityUse910ForEquipmentAndBothBookComponents(ExtractionRules.Component component, boolean book) {
+        var mending = entry("minecraft:mending", component, 1, 1, false);
+        var other = beneficial(5, 5);
+        var original = source(book, mending, other);
+        var preview = RULES.extract(original, mending.key(), BOOK, true);
+        assertTrue(preview.accepted()); assertEquals(910, preview.rawXp());
+        var rejected = RULES.extract(original, mending.key(), BOOK, ExperiencePayment.canAfford(false, 909, preview.rawXp()));
+        assertEquals(ExtractionRules.Failure.INSUFFICIENT_XP, rejected.failure());
+        assertEquals(910, rejected.rawXp()); assertNull(rejected.output()); assertTrue(rejected.remaining().isEmpty());
+        assertEquals(ExtractionRules.ReagentOutput.NONE, rejected.reagentOutput());
+        var accepted = RULES.extract(original, mending.key(), BOOK, ExperiencePayment.canAfford(false, 910, preview.rawXp()));
+        assertTrue(accepted.accepted()); assertEquals(preview.rawXp(), accepted.rawXp());
+        assertEquals(mending, accepted.output()); assertEquals(List.of(other), accepted.remaining());
+        assertEquals(ExtractionRules.ReagentOutput.ENCHANTED_BOOK, accepted.reagentOutput());
+        assertEquals(0, ExperienceMath.state(910 - accepted.rawXp()).level());
+        assertEquals(0, 910 - ExperiencePayment.cost(false, accepted.rawXp()));
+        assertEquals(List.of(mending, other), original.enchantments());
+        // Merely being on the same source as Mending must not surcharge another selection.
+        assertEquals(679, RULES.extract(original, other.key(), BOOK, true).rawXp());
+    }
+    @ParameterizedTest @MethodSource("curses")
+    void mendingCreativeWaivesOnlyXpAndPreservesSingleCurseReagentAndLevelRules(ExtractionRules.Component component, boolean book) {
+        var mending = entry("minecraft:mending", component, 1, 1, false);
+        var other = beneficial(5, 5);
+        var curse = entry("minecraft:binding_curse", component, 1, 1, true);
+        var secondCurse = entry("minecraft:vanishing_curse", component, 1, 1, true);
+        var clean = source(book, mending, other);
+        boolean affordable = ExperiencePayment.canAfford(true, 0, 910);
+        var plan = RULES.extract(clean, mending.key(), BOOK, affordable);
+        assertTrue(plan.accepted()); assertEquals(910, plan.rawXp());
+        assertEquals(0, ExperiencePayment.cost(true, plan.rawXp()));
+        assertEquals(0, 0 - ExperiencePayment.cost(true, plan.rawXp()));
+        assertEquals(ExtractionRules.Failure.MISSING_BLANK_BOOK, RULES.extract(clean, mending.key(), BREATH, affordable).failure());
+        assertEquals(ExtractionRules.Failure.MISSING_BLANK_BOOK,
+                RULES.extract(clean, mending.key(), reagent(ExtractionRules.ReagentType.EMPTY, 0), affordable).failure());
+        assertEquals(ExtractionRules.Failure.INVALID_REAGENT_COUNT,
+                RULES.extract(clean, mending.key(), reagent(ExtractionRules.ReagentType.BLANK_BOOK, 2), affordable).failure());
+        assertEquals(ExtractionRules.Failure.OUTPUT_OCCUPIED, RULES.extract(clean, mending.key(), OUTPUT, affordable).failure());
+        assertEquals(ExtractionRules.Failure.SINGLE_ENCHANTMENT_BOOK,
+                RULES.extract(source(true, mending), mending.key(), BOOK, affordable).failure());
+        var overlevel = entry("minecraft:mending", component, 2, 1, false);
+        assertEquals(ExtractionRules.Failure.INVALID_LEVEL,
+                RULES.extract(source(book, overlevel, other), overlevel.key(), BOOK, affordable).failure());
+        var cursed = source(book, mending, other, curse, secondCurse);
+        var blocked = RULES.extract(cursed, mending.key(), BOOK, affordable);
+        assertEquals(ExtractionRules.Failure.CURSED_SOURCE, blocked.failure()); assertEquals(910, blocked.rawXp());
+        var purified = RULES.extract(cursed, curse.key(), BREATH, affordable);
+        assertTrue(purified.accepted()); assertEquals(315, purified.rawXp());
+        assertEquals(List.of(mending, other, secondCurse), purified.remaining());
+        assertEquals(ExtractionRules.ReagentOutput.GLASS_BOTTLE, purified.reagentOutput());
+        assertEquals(ExtractionRules.Failure.CURSED_SOURCE,
+                RULES.extract(source(book, purified.remaining().toArray(ExtractionRules.Entry[]::new)), mending.key(), BOOK, affordable).failure());
     }
     @Test void outputInReagentSlotBlocksAnotherOperationWithoutPlayerInventoryOrHiddenOutputRequirements() {
         var selected = beneficial(5, 5);
@@ -147,6 +201,10 @@ class ExtractionRulesTest {
             assertNull(plan.output()); assertEquals(ExtractionRules.ReagentOutput.GLASS_BOTTLE, plan.reagentOutput());
             xp -= plan.rawXp();
             current = new ExtractionRules.Source(1, true, true, plan.remaining());
+            assertEquals(ExtractionRules.Failure.SELECT_ENCHANTMENT,
+                    RULES.extract(current, selected.key(), BREATH, true).failure());
+            assertEquals(ExtractionRules.Failure.SELECT_ENCHANTMENT,
+                    RULES.extract(current, null, BREATH, true).failure());
             if (current.enchantments().stream().anyMatch(ExtractionRules.Entry::curse))
                 assertEquals(ExtractionRules.Failure.CURSED_SOURCE, RULES.extract(current, good.key(), BOOK, true).failure());
         }

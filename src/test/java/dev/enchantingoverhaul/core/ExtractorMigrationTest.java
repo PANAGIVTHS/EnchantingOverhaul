@@ -57,17 +57,35 @@ class ExtractorMigrationTest {
             assertThrows(UnsupportedOperationException.class, () -> delivery.inserted().clear());
         }
     }
-    @Test void fullInventoryOverflowMustBeDroppedOrRetainedNotVanillaCreativeDiscarded() {
+    @Test void fullInventoryOverflowStaysPersistedUntilSpaceExistsInAnyGameMode() {
         var migration = ExtractorMigration.plan(List.of(1, 64, 1, 16));
         int recovered = migration.stream().mapToInt(ExtractorMigration.Slot::recover).sum();
         var delivery = ExtractorMigration.delivery(recovered, List.of(0, 0));
         assertEquals(80, recovered); assertEquals(recovered, delivery.overflow());
         assertEquals(0, delivery.inserted().stream().mapToInt(Integer::intValue).sum());
-        // A failed entity spawn restores all overflow to persistent ownership, so reopening retries once.
         int retained = migration.stream().mapToInt(ExtractorMigration.Slot::retained).sum();
-        assertEquals(82, retained + delivery.overflow());
-        // A successful spawn transfers exactly that overflow; nothing remains in old output escrow.
-        assertEquals(82, retained + recovered);
+        assertEquals(82, ExtractorMigration.escrowCount(retained, delivery));
+        var stocked = List.of(1, 64, 1, 16);
+        // Full inventories never hand overflow to an ItemEntity/Inventory.add pickup path.
+        for (int reopening = 0; reopening < 4; reopening++) {
+            var retry = ExtractorMigration.plan(stocked);
+            var persisted = retry.stream().map(slot -> ExtractorMigration.escrowCount(slot.retained(),
+                    ExtractorMigration.delivery(slot.recover(), List.of(0, 0)))).toList();
+            assertEquals(stocked, persisted);
+            stocked = persisted;
+        }
+        // When room appears, return each previously escrowed item exactly once.
+        var finalPlan = ExtractorMigration.plan(stocked);
+        int returned = 0;
+        var remaining = new java.util.ArrayList<Integer>();
+        for (var slot : finalPlan) {
+            var accepted = ExtractorMigration.delivery(slot.recover(), List.of(64));
+            returned += accepted.inserted().stream().mapToInt(Integer::intValue).sum();
+            remaining.add(ExtractorMigration.escrowCount(slot.retained(), accepted));
+        }
+        assertEquals(80, returned);
+        assertEquals(List.of(1, 1, 0, 0), remaining);
+        assertTrue(ExtractorMigration.plan(remaining).stream().allMatch(slot -> slot.recover() == 0));
     }
     @Test void allocationUsesMergeFirstOrderAndLeavesSurplusExplicit() {
         assertEquals(new ExtractorMigration.Delivery(List.of(2, 5, 0), 0), ExtractorMigration.delivery(7, List.of(2, 64, 64)));
